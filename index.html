@@ -1,0 +1,2984 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>AURA — Precision in every pixel. Power in every layer.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Mono:wght@300;400&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --bg: #04060f;
+      --bg2: #070a18;
+      --bg3: #0a0e20;
+      --bg4: #0d1128;
+      --glass: rgba(255, 255, 255, 0.04);
+      --glass2: rgba(255, 255, 255, 0.08);
+      --border: rgba(255, 255, 255, 0.07);
+      --border2: rgba(255, 255, 255, 0.14);
+      --text: #f0eeff;
+      --muted: rgba(220, 215, 255, 0.45);
+      --muted2: rgba(180, 175, 240, 0.22);
+      --r1: #ff6b9d;
+      --r2: #ff9a5c;
+      --r3: #ffe566;
+      --r4: #7fff83;
+      --r5: #38f0c4;
+      --r6: #58a8ff;
+      --r7: #b066ff;
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      cursor: none;
+      overflow-x: hidden
+    }
+
+    #cur,
+    #curR {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%)
+    }
+
+    #cur {
+      width: 9px;
+      height: 9px;
+      background: #fff;
+      transition: width .18s, height .18s, background .2s
+    }
+
+    #curR {
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: transform .38s cubic-bezier(.23, 1, .32, 1), opacity .2s;
+      opacity: .4
+    }
+
+    /* ── OFFER BAR ── */
+    #obar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 700;
+      background: linear-gradient(90deg, var(--r7), var(--r6), var(--r5), var(--r4));
+      padding: 9px 48px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      color: #04060f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px
+    }
+
+    #obar .ob {
+      background: rgba(0, 0, 0, .18);
+      padding: 2px 10px;
+      border-radius: 100px;
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase
+    }
+
+    .ob-close {
+      position: absolute;
+      right: 16px;
+      font-size: 16px;
+      cursor: none;
+      background: none;
+      border: none;
+      color: #04060f;
+      font-weight: 900;
+      opacity: .7;
+      transition: opacity .2s
+    }
+
+    .ob-close:hover {
+      opacity: 1
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 38px;
+      left: 0;
+      right: 0;
+      z-index: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 60px;
+      transition: all .4s
+    }
+
+    nav.solid {
+      background: rgba(4, 6, 15, .97);
+      border-bottom: 1px solid var(--border);
+      top: 0
+    }
+
+    nav.nobar {
+      top: 0
+    }
+
+    .logo {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 22px;
+      letter-spacing: .12em;
+      color: #fff;
+      text-decoration: none;
+      cursor: none;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .logo-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--r6), var(--r5));
+      animation: blink2 3s ease-in-out infinite
+    }
+
+    @keyframes blink2 {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1)
+      }
+
+      50% {
+        opacity: .5;
+        transform: scale(.7)
+      }
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0;
+      list-style: none
+    }
+
+    .nav-links li a {
+      display: block;
+      padding: 7px 16px;
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+      cursor: none;
+      position: relative
+    }
+
+    .nav-links li a:hover,
+    .nav-links li a.active {
+      color: #fff
+    }
+
+    .nav-links li a.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 16px;
+      right: 16px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--r6), var(--r5))
+    }
+
+    .nav-cta {
+      background: linear-gradient(135deg, var(--r6), var(--r5));
+      color: #04060f;
+      padding: 10px 24px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      cursor: none;
+      border-radius: 100px;
+      transition: all .25s;
+      text-decoration: none;
+      border: none
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(88, 168, 255, .3)
+    }
+
+    /* ── SHARED ── */
+    .sec {
+      padding: 120px 60px;
+      max-width: 1380px;
+      margin: 0 auto
+    }
+
+    .sec-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--r5);
+      margin-bottom: 48px
+    }
+
+    .sec-label::before {
+      content: '';
+      width: 18px;
+      height: 1px;
+      background: var(--r5);
+      opacity: .7
+    }
+
+    .h2 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: clamp(32px, 3.8vw, 58px);
+      letter-spacing: -.025em;
+      line-height: 1.0
+    }
+
+    .h2 span {
+      background: linear-gradient(135deg, var(--r6), var(--r5), var(--r4));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text
+    }
+
+    .glass {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      transition: background .3s, border-color .3s
+    }
+
+    .glass:hover {
+      background: var(--glass2);
+      border-color: var(--border2)
+    }
+
+    .spec-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--r7), var(--r6), var(--r5), var(--r4), var(--r3), transparent);
+      opacity: .45
+    }
+
+    .btn-p {
+      background: linear-gradient(135deg, var(--r6), var(--r5));
+      color: #04060f;
+      padding: 13px 30px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 100px;
+      transition: all .25s;
+      display: inline-block;
+      cursor: none;
+      border: none
+    }
+
+    .btn-p:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(88, 168, 255, .3)
+    }
+
+    .btn-g {
+      background: var(--glass);
+      border: 1px solid var(--border2);
+      color: var(--text);
+      padding: 13px 28px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 100px;
+      transition: all .25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: none
+    }
+
+    .btn-g:hover {
+      background: var(--glass2)
+    }
+
+    .stag {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      color: var(--muted);
+      border-radius: 100px
+    }
+
+    /* ══ HERO ══ */
+    #hero {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    #hero-cv {
+      position: absolute;
+      inset: 0;
+      display: block
+    }
+
+    .hero-c {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 24px;
+      max-width: 860px
+    }
+
+    .hero-offer {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: linear-gradient(135deg, rgba(255, 229, 102, .12), rgba(255, 154, 92, .1));
+      border: 1px solid rgba(255, 229, 102, .28);
+      border-radius: 100px;
+      padding: 7px 16px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #ffe566;
+      margin-bottom: 16px;
+      opacity: 0;
+      animation: fu .7s .2s both
+    }
+
+    .hero-spark {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 22px;
+      padding: 7px 16px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      background: var(--glass);
+      opacity: 0;
+      animation: fu .7s .35s both
+    }
+
+    .hero-spark::before {
+      content: '◆';
+      font-size: 8px;
+      background: linear-gradient(135deg, var(--r6), var(--r5));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text
+    }
+
+    h1.hero-h1 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: clamp(54px, 7.5vw, 108px);
+      letter-spacing: -.04em;
+      line-height: .91;
+      color: #fff;
+      opacity: 0;
+      animation: fu .9s .5s both
+    }
+
+    h1.hero-h1 .sp {
+      background: linear-gradient(135deg, var(--r7), var(--r6), var(--r5), var(--r4));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: hshift 5s ease-in-out infinite alternate
+    }
+
+    @keyframes hshift {
+      from {
+        filter: hue-rotate(0deg)
+      }
+
+      to {
+        filter: hue-rotate(40deg)
+      }
+    }
+
+    .hero-sub {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.8;
+      margin: 26px auto 40px;
+      max-width: 520px;
+      opacity: 0;
+      animation: fu .8s .7s both
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fu .7s .9s both
+    }
+
+    .hero-stats {
+      position: absolute;
+      bottom: 50px;
+      right: 60px;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      text-align: right;
+      opacity: 0;
+      animation: fu .7s 1.1s both
+    }
+
+    .hs-n {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 30px;
+      letter-spacing: -.04em;
+      line-height: 1;
+      background: linear-gradient(135deg, #fff, #c8f0ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text
+    }
+
+    .hs-l {
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 2px
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 50px;
+      left: 60px;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 9px;
+      font-size: 10px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: 0;
+      animation: fu .7s 1.3s both
+    }
+
+    .hero-sl {
+      width: 1px;
+      height: 44px;
+      background: var(--border2);
+      overflow: hidden;
+      position: relative
+    }
+
+    .hero-sl::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 40%;
+      background: linear-gradient(to bottom, var(--r6), var(--r5));
+      top: -40%;
+      animation: sd 2s 2s infinite ease-in-out
+    }
+
+    @keyframes sd {
+      0% {
+        top: -40%
+      }
+
+      100% {
+        top: 140%
+      }
+    }
+
+    @keyframes fu {
+      from {
+        opacity: 0;
+        transform: translateY(18px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    /* ── MARQUEE ── */
+    .mq {
+      padding: 14px 0;
+      overflow: hidden;
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border)
+    }
+
+    .mq-t {
+      display: flex;
+      white-space: nowrap;
+      animation: mqr 28s linear infinite
+    }
+
+    .mq-t span {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted2);
+      padding: 0 30px
+    }
+
+    .mq-t .d {
+      padding: 0;
+      font-size: 8px;
+      background: linear-gradient(135deg, var(--r6), var(--r5));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text
+    }
+
+    @keyframes mqr {
+      from {
+        transform: translateX(0)
+      }
+
+      to {
+        transform: translateX(-50%)
+      }
+    }
+
+    /* ══ SERVICES ══ */
+    #services {
+      background: var(--bg)
+    }
+
+    .srvs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 48px
+    }
+
+    .srv {
+      padding: 36px 30px;
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      transition: all .3s;
+      transform-style: preserve-3d
+    }
+
+    .srv::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .45s cubic-bezier(.23, 1, .32, 1)
+    }
+
+    .srv:nth-child(1)::before {
+      background: linear-gradient(90deg, var(--r7), var(--r6))
+    }
+
+    .srv:nth-child(2)::before {
+      background: linear-gradient(90deg, var(--r6), var(--r5))
+    }
+
+    .srv:nth-child(3)::before {
+      background: linear-gradient(90deg, var(--r5), var(--r4))
+    }
+
+    .srv:nth-child(4)::before {
+      background: linear-gradient(90deg, var(--r4), var(--r3))
+    }
+
+    .srv:nth-child(5)::before {
+      background: linear-gradient(90deg, var(--r3), var(--r2))
+    }
+
+    .srv:nth-child(6)::before {
+      background: linear-gradient(90deg, var(--r2), var(--r1))
+    }
+
+    .srv:hover::before {
+      transform: scaleX(1)
+    }
+
+    .srv-n {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: .12em;
+      color: var(--muted2);
+      margin-bottom: 22px
+    }
+
+    .srv-ico {
+      width: 36px;
+      height: 36px;
+      margin-bottom: 18px
+    }
+
+    .srv-t {
+      font-weight: 700;
+      font-size: 17px;
+      margin-bottom: 10px
+    }
+
+    .srv-d {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.8
+    }
+
+    .srv-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 18px
+    }
+
+    /* ══ WORK ══ */
+    #work {
+      background: var(--bg2)
+    }
+
+    .work-card {
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: border-color .3s, transform .35s cubic-bezier(.23, 1, .32, 1)
+    }
+
+    .work-card:hover {
+      border-color: var(--border2);
+      transform: translateY(-4px)
+    }
+
+    .work-thumb {
+      height: 320px;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg3)
+    }
+
+    #wk-cv {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%
+    }
+
+    .work-over {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 45%, rgba(4, 6, 15, .95));
+      z-index: 1
+    }
+
+    .work-live-tag {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 2;
+      background: rgba(4, 6, 15, .8);
+      border: 1px solid var(--border);
+      padding: 5px 14px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--r5);
+      border-radius: 100px;
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .work-live-tag::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--r5);
+      animation: blink 2s infinite
+    }
+
+    .work-body {
+      padding: 28px 32px 36px;
+      background: var(--bg2)
+    }
+
+    .work-cats {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap
+    }
+
+    .work-name {
+      font-weight: 700;
+      font-size: 26px;
+      letter-spacing: -.01em;
+      margin-bottom: 10px
+    }
+
+    .work-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.85;
+      margin-bottom: 20px;
+      max-width: 700px
+    }
+
+    .plnk {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: linear-gradient(135deg, var(--r6), var(--r5));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      cursor: none;
+      transition: opacity .2s
+    }
+
+    .plnk:hover {
+      opacity: .7
+    }
+
+    /* Upload */
+    .uz-zone {
+      border: 2px dashed var(--border2);
+      border-radius: 14px;
+      padding: 44px 28px;
+      text-align: center;
+      transition: all .3s;
+      margin-top: 24px;
+      cursor: none
+    }
+
+    .uz-zone.dov {
+      border-color: var(--r5);
+      background: rgba(56, 240, 196, .04)
+    }
+
+    .uz-ico {
+      font-size: 38px;
+      margin-bottom: 12px;
+      opacity: .55
+    }
+
+    .uz-zone h3 {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 5px
+    }
+
+    .uz-zone p {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.7
+    }
+
+    .uz-btn {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 9px 22px;
+      background: var(--glass);
+      border: 1px solid var(--border2);
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text);
+      cursor: none;
+      transition: all .2s
+    }
+
+    .uz-btn:hover {
+      background: var(--glass2)
+    }
+
+    #file-in {
+      display: none
+    }
+
+    .up-prev {
+      display: none;
+      margin-top: 18px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border)
+    }
+
+    .up-prev img {
+      width: 100%;
+      height: auto;
+      display: block;
+      max-height: 420px;
+      object-fit: cover
+    }
+
+    .up-prev-bar {
+      background: var(--bg2);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .up-nm {
+      font-size: 11px;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace
+    }
+
+    .up-rm {
+      background: none;
+      border: none;
+      color: var(--r1);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      cursor: none
+    }
+
+    .soon-strip {
+      margin-top: 24px;
+      padding: 26px 28px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      flex-wrap: wrap
+    }
+
+    .soon-strip strong {
+      font-size: 14px;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 4px
+    }
+
+    .soon-strip p {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.7
+    }
+
+    /* ══ PRICING ══ */
+    #pricing {
+      background: var(--bg)
+    }
+
+    .offer-banner {
+      background: linear-gradient(135deg, rgba(255, 229, 102, .09), rgba(255, 154, 92, .07));
+      border: 1px solid rgba(255, 229, 102, .22);
+      border-radius: 14px;
+      padding: 20px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 28px;
+      flex-wrap: wrap
+    }
+
+    .ob-l {
+      display: flex;
+      align-items: center;
+      gap: 14px
+    }
+
+    .ob-ico {
+      font-size: 28px
+    }
+
+    .ob-txt strong {
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffe566
+    }
+
+    .ob-txt p {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px
+    }
+
+    .ob-r {
+      text-align: right
+    }
+
+    .ob-n {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 32px;
+      background: linear-gradient(135deg, #ffe566, #ff9a5c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1
+    }
+
+    .ob-sl {
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 3px
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px
+    }
+
+    .pc {
+      padding: 34px 28px;
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden
+    }
+
+    .pc.feat {
+      border: 1px solid rgba(88, 168, 255, .4) !important;
+      background: linear-gradient(145deg, rgba(88, 168, 255, .08), rgba(56, 240, 196, .06)) !important
+    }
+
+    .pc-badge {
+      position: absolute;
+      top: -1px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--r6), var(--r5));
+      color: #04060f;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 0 0 10px 10px
+    }
+
+    .pc-name {
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px
+    }
+
+    .pc-was {
+      font-size: 12px;
+      color: var(--muted2);
+      text-decoration: line-through;
+      min-height: 17px
+    }
+
+    .pc-price {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 50px;
+      letter-spacing: -.04em;
+      line-height: 1;
+      color: #fff;
+      margin-bottom: 2px
+    }
+
+    .pc-price sup {
+      font-size: 22px;
+      vertical-align: top;
+      margin-top: 10px;
+      display: inline-block
+    }
+
+    .pc.feat .pc-price {
+      background: linear-gradient(135deg, var(--r6), var(--r5));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text
+    }
+
+    .pc-note {
+      font-size: 11px;
+      color: var(--muted2);
+      margin-bottom: 6px
+    }
+
+    .pc-tag {
+      display: inline-block;
+      background: linear-gradient(135deg, rgba(255, 229, 102, .14), rgba(255, 154, 92, .10));
+      border: 1px solid rgba(255, 229, 102, .28);
+      border-radius: 100px;
+      padding: 3px 11px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #ffe566;
+      letter-spacing: .08em;
+      margin-bottom: 18px
+    }
+
+    .pc-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 22px
+    }
+
+    .pc-list li {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .pc-list li::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, var(--r6), var(--r5))
+    }
+
+    .pc-btn {
+      display: block;
+      text-align: center;
+      padding: 11px;
+      border: 1px solid var(--border2);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      border-radius: 100px;
+      transition: all .25s;
+      cursor: none
+    }
+
+    .pc.feat .pc-btn {
+      background: linear-gradient(135deg, var(--r6), var(--r5));
+      color: #04060f;
+      border: none
+    }
+
+    .pc-btn:hover {
+      background: linear-gradient(135deg, var(--r6), var(--r5));
+      color: #04060f;
+      border-color: transparent
+    }
+
+    /* Stats strip between sections */
+    .stats-strip {
+      background: var(--bg3);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border)
+    }
+
+    .stats-inner {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 72px 60px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 0
+    }
+
+    .sbox {
+      background: var(--bg3);
+      padding: 36px 24px;
+      text-align: center;
+      transition: background .25s
+    }
+
+    .sbox:hover {
+      background: var(--bg4)
+    }
+
+    .sbig {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: clamp(36px, 4vw, 54px);
+      letter-spacing: -.04em;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--r6), var(--r5), var(--r4));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text
+    }
+
+    .slbl {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: .08em;
+      margin-top: 8px;
+      text-transform: uppercase
+    }
+
+    /* ══ TESTIMONIALS ══ */
+    #testimonials {
+      background: var(--bg2)
+    }
+
+    .tgrid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 48px
+    }
+
+    .tc {
+      padding: 38px 34px;
+      border-radius: 18px;
+      position: relative;
+      overflow: hidden
+    }
+
+    .tc::before {
+      content: '"';
+      position: absolute;
+      top: 14px;
+      right: 24px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 110px;
+      font-weight: 800;
+      color: var(--border);
+      line-height: 1
+    }
+
+    .tc-q {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 26px;
+      font-style: italic;
+      position: relative;
+      z-index: 1
+    }
+
+    .tc-a {
+      display: flex;
+      align-items: center;
+      gap: 13px
+    }
+
+    .tc-av {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--border2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 12px;
+      color: var(--r5);
+      flex-shrink: 0
+    }
+
+    .tc-nm {
+      font-weight: 600;
+      font-size: 13px
+    }
+
+    .tc-rl {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px
+    }
+
+    .stars {
+      color: var(--r3);
+      font-size: 13px;
+      letter-spacing: 2px;
+      margin-bottom: 16px
+    }
+
+    /* ══ FAQ ══ */
+    #faq {
+      background: var(--bg)
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 48px
+    }
+
+    .faq-item {
+      padding: 26px 28px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      transition: all .3s;
+      cursor: none
+    }
+
+    .faq-item:hover {
+      border-color: var(--border2);
+      background: var(--glass)
+    }
+
+    .faq-q {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      color: var(--text)
+    }
+
+    .faq-q::before {
+      content: 'Q';
+      font-size: 9px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--r6), var(--r5));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: .1em;
+      flex-shrink: 0;
+      margin-top: 3px
+    }
+
+    .faq-a {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.8;
+      padding-left: 22px
+    }
+
+    /* ══ CONTACT ══ */
+    #contact {
+      background: var(--bg2)
+    }
+
+    .cgrid {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 60px;
+      align-items: start;
+      margin-top: 48px
+    }
+
+    .c-info {
+      display: flex;
+      flex-direction: column;
+      gap: 13px
+    }
+
+    .c-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 20px;
+      border-radius: 14px
+    }
+
+    .c-ico {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      color: var(--r5)
+    }
+
+    .c-lbl {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted2);
+      margin-bottom: 4px
+    }
+
+    .c-val {
+      font-size: 13px;
+      color: var(--text)
+    }
+
+    .c-val a {
+      color: var(--r5);
+      text-decoration: none
+    }
+
+    .socials {
+      display: flex;
+      gap: 9px;
+      margin-top: 12px
+    }
+
+    .soc {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all .2s;
+      cursor: none
+    }
+
+    .soc:hover {
+      border-color: var(--border2);
+      color: #fff;
+      background: var(--glass)
+    }
+
+    .cform {
+      display: flex;
+      flex-direction: column;
+      gap: 13px
+    }
+
+    .crow {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 13px
+    }
+
+    .cf {
+      display: flex;
+      flex-direction: column;
+      gap: 6px
+    }
+
+    .cf label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted2)
+    }
+
+    .cf input,
+    .cf textarea,
+    .cf select {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 13px 15px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      border-radius: 10px;
+      transition: border-color .2s;
+      outline: none;
+      resize: none
+    }
+
+    .cf input::placeholder,
+    .cf textarea::placeholder {
+      color: var(--muted2)
+    }
+
+    .cf input:focus,
+    .cf textarea:focus,
+    .cf select:focus {
+      border-color: rgba(88, 168, 255, .4);
+      background: rgba(88, 168, 255, .03)
+    }
+
+    .cf textarea {
+      min-height: 120px
+    }
+
+    .cf select option {
+      background: #0a0e20
+    }
+
+    .csub {
+      background: linear-gradient(135deg, var(--r6), var(--r5));
+      color: #04060f;
+      padding: 14px 32px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 100px;
+      cursor: none;
+      transition: all .25s;
+      align-self: flex-start
+    }
+
+    .csub:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(88, 168, 255, .28)
+    }
+
+    #form-ok {
+      display: none;
+      background: rgba(56, 240, 196, .08);
+      border: 1px solid rgba(56, 240, 196, .2);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: var(--r5);
+      margin-top: 8px
+    }
+
+    /* CTA prism */
+    #ctaprism {
+      position: relative;
+      overflow: hidden;
+      min-height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-top: 1px solid var(--border)
+    }
+
+    #cta-cv {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%
+    }
+
+    .cta-inner {
+      position: relative;
+      z-index: 2;
+      padding: 80px 48px
+    }
+
+    .cta-h {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: clamp(34px, 5vw, 66px);
+      letter-spacing: -.035em;
+      line-height: .93;
+      color: #fff;
+      margin-bottom: 14px
+    }
+
+    .cta-h span {
+      background: linear-gradient(135deg, var(--r7), var(--r6), var(--r5), var(--r4));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text
+    }
+
+    .cta-sub {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 30px
+    }
+
+    .cta-email {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: clamp(16px, 2.2vw, 26px);
+      background: linear-gradient(135deg, var(--r6), var(--r5));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+      cursor: none
+    }
+
+    /* Footer */
+    footer {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      padding: 56px 60px 36px
+    }
+
+    .ft-grid {
+      max-width: 1380px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 240px 1fr 1fr 1fr;
+      gap: 56px;
+      margin-bottom: 44px
+    }
+
+    .ft-logo {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: .12em;
+      color: #fff;
+      display: block;
+      margin-bottom: 12px
+    }
+
+    .ft-tag {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.7
+    }
+
+    .ft-ct {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted2);
+      margin-bottom: 18px
+    }
+
+    .ft-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 11px
+    }
+
+    .ft-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color .2s;
+      cursor: none
+    }
+
+    .ft-links a:hover {
+      color: #fff
+    }
+
+    .ft-bot {
+      max-width: 1380px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      padding-top: 26px;
+      flex-wrap: wrap;
+      gap: 12px
+    }
+
+    .ft-copy {
+      font-size: 11px;
+      color: var(--muted2)
+    }
+
+    .avail {
+      font-size: 10px;
+      color: var(--muted2);
+      letter-spacing: .1em;
+      display: flex;
+      align-items: center;
+      gap: 7px
+    }
+
+    .avail::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--r5);
+      animation: blink 2s infinite
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .15
+      }
+    }
+
+    /* Reveal */
+    .rev {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .7s ease, transform .7s ease
+    }
+
+    .rev.in {
+      opacity: 1;
+      transform: translateY(0)
+    }
+
+    .rev2 {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .7s .15s ease, transform .7s .15s ease
+    }
+
+    .rev2.in {
+      opacity: 1;
+      transform: translateY(0)
+    }
+
+    .rev3 {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .7s .3s ease, transform .7s .3s ease
+    }
+
+    .rev3.in {
+      opacity: 1;
+      transform: translateY(0)
+    }
+
+    @media(max-width:900px) {
+      nav {
+        padding: 16px 22px
+      }
+
+      .nav-links {
+        display: none
+      }
+
+      .sec {
+        padding: 80px 22px
+      }
+
+      .srvs-grid,
+      .pricing-grid,
+      .tgrid,
+      .faq-grid,
+      .cgrid {
+        grid-template-columns: 1fr
+      }
+
+      .hero-stats,
+      .hero-scroll {
+        display: none
+      }
+
+      .ft-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px
+      }
+
+      .stats-inner {
+        grid-template-columns: 1fr 1fr
+      }
+
+      #obar {
+        padding: 8px 40px 8px 16px;
+        font-size: 11px
+      }
+    }
+
+    /* ══ ABOUT ══ */
+    #about {
+      background: var(--bg2)
+    }
+
+    .about-intro-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 80px;
+      align-items: center;
+      margin-top: 48px
+    }
+
+    .about-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: linear-gradient(135deg, rgba(88, 168, 255, .1), rgba(56, 240, 196, .08));
+      border: 1px solid rgba(88, 168, 255, .28);
+      border-radius: 100px;
+      padding: 7px 16px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--r6);
+      margin-bottom: 20px
+    }
+
+    .about-text p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.9;
+      margin-bottom: 16px
+    }
+
+    .about-text p strong {
+      color: var(--text)
+    }
+
+    .about-nums {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 28px
+    }
+
+    .abn {
+      padding: 22px 26px;
+      border-radius: 14px;
+      border-left: 3px solid transparent
+    }
+
+    .abn:nth-child(1) {
+      border-left-color: var(--r6)
+    }
+
+    .abn:nth-child(2) {
+      border-left-color: var(--r5)
+    }
+
+    .abn:nth-child(3) {
+      border-left-color: var(--r4)
+    }
+
+    .abn-n {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 34px;
+      letter-spacing: -.04em;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--r6), var(--r5));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text
+    }
+
+    .abn-l {
+      font-size: 10px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px
+    }
+
+    /* ── Values ── */
+    #values {
+      background: var(--bg)
+    }
+
+    .vals-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 48px
+    }
+
+    .val {
+      padding: 36px 30px;
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      transition: all .3s
+    }
+
+    .val::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .45s cubic-bezier(.23, 1, .32, 1)
+    }
+
+    .val:nth-child(1)::before {
+      background: linear-gradient(90deg, var(--r7), var(--r6))
+    }
+
+    .val:nth-child(2)::before {
+      background: linear-gradient(90deg, var(--r6), var(--r5))
+    }
+
+    .val:nth-child(3)::before {
+      background: linear-gradient(90deg, var(--r5), var(--r4))
+    }
+
+    .val:nth-child(4)::before {
+      background: linear-gradient(90deg, var(--r4), var(--r3))
+    }
+
+    .val:nth-child(5)::before {
+      background: linear-gradient(90deg, var(--r3), var(--r2))
+    }
+
+    .val:nth-child(6)::before {
+      background: linear-gradient(90deg, var(--r2), var(--r1))
+    }
+
+    .val:hover::before {
+      transform: scaleX(1)
+    }
+
+    .val-ico {
+      font-size: 30px;
+      margin-bottom: 16px
+    }
+
+    .val-t {
+      font-weight: 700;
+      font-size: 17px;
+      margin-bottom: 10px
+    }
+
+    .val-d {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.8
+    }
+
+    /* ── Team ── */
+    #team {
+      background: var(--bg2)
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 48px
+    }
+
+    .tm {
+      padding: 36px 28px;
+      border-radius: 20px;
+      text-align: center
+    }
+
+    .tm-av {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin: 0 auto 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 24px;
+      background: var(--bg3);
+      border: 2px solid var(--border2)
+    }
+
+    .tm-av.c1 {
+      border-color: var(--r6);
+      color: var(--r6)
+    }
+
+    .tm-av.c2 {
+      border-color: var(--r5);
+      color: var(--r5)
+    }
+
+    .tm-av.c3 {
+      border-color: var(--r7);
+      color: var(--r7)
+    }
+
+    .tm-name {
+      font-weight: 700;
+      font-size: 17px;
+      margin-bottom: 4px
+    }
+
+    .tm-role {
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--r5);
+      margin-bottom: 12px
+    }
+
+    .tm-bio {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.8
+    }
+
+    .tm-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 14px;
+      justify-content: center
+    }
+
+    /* ── Process ── */
+    #process {
+      background: var(--bg)
+    }
+
+    .proc-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 48px
+    }
+
+    .proc {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 32px;
+      align-items: start;
+      padding: 32px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: none;
+      transition: padding-left .25s
+    }
+
+    .proc:hover {
+      padding-left: 12px
+    }
+
+    .proc-n {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      letter-spacing: .06em;
+      color: var(--muted2)
+    }
+
+    .proc-t {
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--r6), var(--r5));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text
+    }
+
+    .proc-d {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.8
+    }
+
+    @media(max-width:900px) {
+
+      .about-intro-grid,
+      .vals-grid,
+      .team-grid {
+        grid-template-columns: 1fr
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="cur"></div>
+  <div id="curR"></div>
+
+  <!-- OFFER BAR -->
+  <div id="obar">
+    <span class="ob">Limited time</span>
+    🎉 First <strong>&nbsp;10 customers&nbsp;</strong> get <strong>&nbsp;50% OFF&nbsp;</strong> any plan — only a few
+    spots left!
+    <button class="ob-close" onclick="closeBar()">✕</button>
+  </div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a class="logo" href="#hero"><span class="logo-dot"></span>AURA</a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#testimonials">Reviews</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <a class="nav-cta" href="#contact">Get a quote</a>
+  </nav>
+
+  <!-- ══════════════════════ 1. HERO ══════════════════════ -->
+  <section id="hero">
+    <canvas id="hero-cv"></canvas>
+    <div class="hero-c">
+      <div class="hero-offer">🎉 50% off founding offer — <strong>first 10 clients only</strong></div>
+      <div class="hero-spark">Precision in every pixel · Power in every layer</div>
+      <h1 class="hero-h1">We Build<br /><span class="sp">Radiant</span><br />Digital Worlds</h1>
+      <p class="hero-sub">AURA is a Sri Lanka-based web development studio crafting high-performance, visually
+        extraordinary digital experiences. Starting from just <strong style="color:#fff">$25.</strong></p>
+      <div class="hero-btns">
+        <a href="#work" class="btn-p">See our work</a>
+        <a href="#pricing" class="btn-g">◆ View pricing</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hs-n">$25</div>
+        <div class="hs-l">Starting price</div>
+      </div>
+      <div>
+        <div class="hs-n">50%</div>
+        <div class="hs-l">Founding discount</div>
+      </div>
+      <div>
+        <div class="hs-n">24h</div>
+        <div class="hs-l">Reply guarantee</div>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <div class="hero-sl"></div><span>Scroll</span>
+    </div>
+  </section>
+
+  <div class="spec-line"></div>
+  <div class="mq">
+    <div class="mq-t"><span>React</span><span class="d">◆</span><span>Next.js</span><span
+        class="d">◆</span><span>Node.js</span><span class="d">◆</span><span>TypeScript</span><span
+        class="d">◆</span><span>Three.js</span><span class="d">◆</span><span>PostgreSQL</span><span
+        class="d">◆</span><span>Tailwind</span><span class="d">◆</span><span>Shopify</span><span
+        class="d">◆</span><span>Figma</span><span class="d">◆</span><span>AWS</span><span
+        class="d">◆</span><span>GraphQL</span><span class="d">◆</span><span>Docker</span><span
+        class="d">◆</span><span>React</span><span class="d">◆</span><span>Next.js</span><span
+        class="d">◆</span><span>Node.js</span><span class="d">◆</span><span>TypeScript</span><span
+        class="d">◆</span><span>Three.js</span><span class="d">◆</span><span>PostgreSQL</span><span
+        class="d">◆</span><span>Tailwind</span><span class="d">◆</span><span>Shopify</span><span
+        class="d">◆</span><span>Figma</span><span class="d">◆</span><span>AWS</span><span
+        class="d">◆</span><span>GraphQL</span><span class="d">◆</span><span>Docker</span><span class="d">◆</span></div>
+  </div>
+
+  <!-- ══════════════════════ 2. SERVICES ══════════════════════ -->
+  <section id="services">
+    <div class="sec">
+      <p class="sec-label rev">What we offer</p>
+      <h2 class="h2 rev2">Services built to<br /><span>make you shine</span></h2>
+      <p class="rev2" style="color:var(--muted);font-size:13px;max-width:480px;margin-top:12px;line-height:1.8">
+        Everything you need to launch, grow, and stand out online — at prices that make saying yes easy.</p>
+      <div class="srvs-grid rev3">
+        <div class="srv glass">
+          <div class="srv-n">01 — Design</div><svg class="srv-ico" viewBox="0 0 24 24" fill="none" stroke="url(#g1)"
+            stroke-width="1.5">
+            <defs>
+              <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#58a8ff" />
+                <stop offset="100%" stop-color="#38f0c4" />
+              </linearGradient>
+            </defs>
+            <rect x="2" y="3" width="20" height="14" rx="2" />
+            <path d="M8 21h8M12 17v4M7 8l3 3-3 3M13 14h4" />
+          </svg>
+          <h3 class="srv-t">Web Design & UI/UX</h3>
+          <p class="srv-d">Stunning, conversion-focused designs rooted in user experience. Figma layouts, design
+            systems, and interfaces people love to use.</p>
+          <div class="srv-tags"><span class="stag">Figma</span><span class="stag">UI Design</span><span
+              class="stag">Prototypes</span></div>
+        </div>
+        <div class="srv glass">
+          <div class="srv-n">02 — Frontend</div><svg class="srv-ico" viewBox="0 0 24 24" fill="none" stroke="url(#g2)"
+            stroke-width="1.5">
+            <defs>
+              <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#38f0c4" />
+                <stop offset="100%" stop-color="#7fff83" />
+              </linearGradient>
+            </defs>
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+          </svg>
+          <h3 class="srv-t">Frontend Development</h3>
+          <p class="srv-d">React, Next.js, TypeScript — fast, accessible, animated interfaces with Lighthouse 95+ scores
+            as standard.</p>
+          <div class="srv-tags"><span class="stag">React</span><span class="stag">Next.js</span><span
+              class="stag">Tailwind</span></div>
+        </div>
+        <div class="srv glass">
+          <div class="srv-n">03 — Full Stack</div><svg class="srv-ico" viewBox="0 0 24 24" fill="none" stroke="url(#g3)"
+            stroke-width="1.5">
+            <defs>
+              <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#7fff83" />
+                <stop offset="100%" stop-color="#ffe566" />
+              </linearGradient>
+            </defs>
+            <ellipse cx="12" cy="5" rx="9" ry="3" />
+            <path d="M3 5v14a9 3 0 0018 0V5M3 12a9 3 0 0018 0" />
+          </svg>
+          <h3 class="srv-t">Full Stack Apps</h3>
+          <p class="srv-d">End-to-end product engineering — frontend, backend, database, auth, payments. Your product,
+            production-ready.</p>
+          <div class="srv-tags"><span class="stag">Node.js</span><span class="stag">PostgreSQL</span><span
+              class="stag">APIs</span></div>
+        </div>
+        <div class="srv glass">
+          <div class="srv-n">04 — Commerce</div><svg class="srv-ico" viewBox="0 0 24 24" fill="none" stroke="url(#g4)"
+            stroke-width="1.5">
+            <defs>
+              <linearGradient id="g4" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#ffe566" />
+                <stop offset="100%" stop-color="#ff9a5c" />
+              </linearGradient>
+            </defs>
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <path d="M16 10a4 4 0 01-8 0" />
+          </svg>
+          <h3 class="srv-t">E-Commerce</h3>
+          <p class="srv-d">High-converting Shopify stores or fully custom platforms with Stripe payments, inventory, and
+            analytics.</p>
+          <div class="srv-tags"><span class="stag">Shopify</span><span class="stag">Stripe</span><span
+              class="stag">Headless</span></div>
+        </div>
+        <div class="srv glass">
+          <div class="srv-n">05 — 3D & Creative</div><svg class="srv-ico" viewBox="0 0 24 24" fill="none"
+            stroke="url(#g5)" stroke-width="1.5">
+            <defs>
+              <linearGradient id="g5" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#ff9a5c" />
+                <stop offset="100%" stop-color="#ff6b9d" />
+              </linearGradient>
+            </defs>
+            <path
+              d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" />
+          </svg>
+          <h3 class="srv-t">3D & Interactive</h3>
+          <p class="srv-d">WebGL, Three.js, particle systems, immersive animations that make your brand unforgettable
+            and unique.</p>
+          <div class="srv-tags"><span class="stag">Three.js</span><span class="stag">WebGL</span><span
+              class="stag">GSAP</span></div>
+        </div>
+        <div class="srv glass">
+          <div class="srv-n">06 — Speed & SEO</div><svg class="srv-ico" viewBox="0 0 24 24" fill="none"
+            stroke="url(#g6)" stroke-width="1.5">
+            <defs>
+              <linearGradient id="g6" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#ff6b9d" />
+                <stop offset="100%" stop-color="#b066ff" />
+              </linearGradient>
+            </defs>
+            <path d="M18 20V10M12 20V4M6 20v-6" />
+          </svg>
+          <h3 class="srv-t">Performance & SEO</h3>
+          <p class="srv-d">Core Web Vitals optimisation, structured data, on-page SEO. Google will love your site. So
+            will users.</p>
+          <div class="srv-tags"><span class="stag">Core Web Vitals</span><span class="stag">SEO</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="spec-line"></div>
+
+  <!-- ══════════════════════ 3. WORK ══════════════════════ -->
+  <section id="work" style="background:var(--bg2);padding:0">
+    <div class="sec">
+      <p class="sec-label rev">Portfolio</p>
+      <h2 class="h2 rev2">Work that speaks<br /><span>for itself</span></h2>
+      <p class="rev2"
+        style="color:var(--muted);font-size:13px;line-height:1.8;max-width:500px;margin-top:10px;margin-bottom:0">We're
+        a new studio — one real, exceptional project beats a dozen fakes.</p>
+      <div class="work-card rev3" style="margin-top:36px">
+        <div class="work-thumb">
+          <canvas id="wk-cv"></canvas>
+          <div class="work-over"></div>
+          <div class="work-live-tag">Live</div>
+        </div>
+        <div class="work-body">
+          <div class="work-cats"><span class="stag">Travel & Tourism</span><span class="stag">Full Website</span><span
+              class="stag">Responsive</span><span class="stag">SEO</span></div>
+          <div class="work-name">Pearl Heritage Tours</div>
+          <p class="work-desc">A full website for Pearl Heritage Tours — a premium Sri Lankan travel and tour operator.
+            Clean, visually rich, showcasing tour packages, destination highlights, and a booking enquiry system. Fully
+            mobile-responsive, SEO-optimised, and built to convert visitors into enquiries. Delivered on time and loved
+            by the client.</p>
+          <div style="display:flex;gap:16px;flex-wrap:wrap">
+            <a href="https://pearlheritagetours.com" target="_blank" class="plnk">Visit live site ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="soon-strip rev3">
+        <div style="font-size:32px">🚀</div>
+        <div><strong>More projects coming soon</strong>
+          <p>We're actively taking on new clients and building our portfolio. Want yours featured here?</p><a
+            href="#contact" class="btn-p" style="margin-top:12px;font-size:11px;display:inline-block">Start a project
+            →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS STRIP -->
+  <div class="stats-strip">
+    <div class="stats-inner rev">
+      <div class="sbox">
+        <div class="sbig">$25</div>
+        <div class="slbl">Lowest price</div>
+      </div>
+      <div class="sbox">
+        <div class="sbig">50%</div>
+        <div class="slbl">Founding discount</div>
+      </div>
+      <div class="sbox">
+        <div class="sbig">7d</div>
+        <div class="slbl">Fastest delivery</div>
+      </div>
+      <div class="sbox">
+        <div class="sbig">100%</div>
+        <div class="slbl">On-time record</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════ 4. PRICING ══════════════════════ -->
+  <section id="pricing">
+    <div class="sec">
+      <p class="sec-label rev">Transparent pricing</p>
+      <h2 class="h2 rev2">Simple prices.<br /><span>Serious quality.</span></h2>
+      <p class="rev2"
+        style="color:var(--muted);font-size:13px;max-width:480px;margin-top:10px;margin-bottom:28px;line-height:1.8">
+        We're just starting out — so you get outstanding work at prices no established agency can touch. <strong
+          style="color:#ffe566">50% off for first 10 clients.</strong></p>
+      <div class="offer-banner rev2 glass">
+        <div class="ob-l">
+          <div class="ob-ico">🎉</div>
+          <div class="ob-txt"><strong>Founding Client Offer — 50% Off Everything</strong>
+            <p>Half price to our first 10 clients as we build our portfolio. Same exceptional quality, half the cost.
+            </p>
+          </div>
+        </div>
+        <div class="ob-r">
+          <div class="ob-n" id="live-spots">10</div>
+          <div class="ob-sl">spots available</div>
+        </div>
+      </div>
+      <div class="pricing-grid rev3">
+        <div class="pc glass">
+          <div class="pc-name">Starter</div>
+          <div class="pc-was">was $49</div>
+          <div class="pc-price"><sup>$</sup>25</div>
+          <div class="pc-note">one-time · landing page</div>
+          <div class="pc-tag">50% founding discount</div>
+          <ul class="pc-list">
+            <li>Landing page (up to 5 sections)</li>
+            <li>Mobile responsive design</li>
+            <li>Contact form included</li>
+            <li>Speed & SEO optimised</li>
+            <li>3 revision rounds</li>
+            <li>7-day delivery</li>
+          </ul>
+          <a href="#contact" class="pc-btn">Claim this price</a>
+        </div>
+        <div class="pc feat glass">
+          <div class="pc-badge">Most popular</div>
+          <div class="pc-name">Growth</div>
+          <div class="pc-was">was $199</div>
+          <div class="pc-price"><sup>$</sup>99</div>
+          <div class="pc-note">one-time · full website</div>
+          <div class="pc-tag">50% founding discount</div>
+          <ul class="pc-list">
+            <li>Multi-page website (up to 8 pages)</li>
+            <li>Custom UI/UX design in Figma</li>
+            <li>CMS integration</li>
+            <li>Blog or portfolio section</li>
+            <li>Analytics + performance setup</li>
+            <li>5 revision rounds</li>
+            <li>14-day delivery</li>
+            <li>30-day post-launch support</li>
+          </ul>
+          <a href="#contact" class="pc-btn">Claim this price</a>
+        </div>
+        <div class="pc glass">
+          <div class="pc-name">Professional</div>
+          <div class="pc-was">was $499</div>
+          <div class="pc-price"><sup>$</sup>249</div>
+          <div class="pc-note">one-time · web application</div>
+          <div class="pc-tag">50% founding discount</div>
+          <ul class="pc-list">
+            <li>Full-stack web application</li>
+            <li>Backend + database + auth</li>
+            <li>Payment integration (Stripe)</li>
+            <li>Admin dashboard</li>
+            <li>Testing + AWS/Vercel deploy</li>
+            <li>Unlimited revisions</li>
+            <li>30-day delivery</li>
+            <li>90-day support included</li>
+          </ul>
+          <a href="#contact" class="pc-btn">Claim this price</a>
+        </div>
+      </div>
+      <p style="text-align:center;margin-top:14px;font-size:12px;color:var(--muted2)">After 10 clients, prices return to
+        standard. <a href="#contact" style="color:var(--r5);text-decoration:none">Contact us before spots fill →</a></p>
+    </div>
+  </section>
+
+  <div class="spec-line"></div>
+
+  <!-- ══════════════════════ 5. TESTIMONIALS ══════════════════════ -->
+  <section id="testimonials" style="padding:0">
+    <div class="sec">
+      <p class="sec-label rev">Client reviews</p>
+      <h2 class="h2 rev2">Real words from<br /><span>real people</span></h2>
+      <div class="tgrid rev3">
+        <div class="tc glass">
+          <div class="stars">★★★★★</div>
+          <p class="tc-q">AURA delivered exactly what we needed — a clean, fast, beautiful website for Pearl Heritage
+            Tours. They were communicative, professional, and went above and beyond. The price was unbelievable for the
+            quality we received. We'll be working with them again.</p>
+          <div class="tc-a">
+            <div class="tc-av">PH</div>
+            <div>
+              <div class="tc-nm">Pearl Heritage Tours</div>
+              <div class="tc-rl">Travel & Tourism · Sri Lanka 🇱🇰</div>
+            </div>
+          </div>
+        </div>
+        <div class="tc glass">
+          <div class="stars">★★★★★</div>
+          <p class="tc-q">I was sceptical at first — the prices seemed too low to be real. But AURA delivered genuinely
+            outstanding work. Responsive, fast, and every question answered promptly. I'll be coming back for the full
+            app build. Highly recommended for any small business.</p>
+          <div class="tc-a">
+            <div class="tc-av">FK</div>
+            <div>
+              <div class="tc-nm">Founding Client</div>
+              <div class="tc-rl">E-Commerce · Remote</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        style="text-align:center;margin-top:28px;padding:20px;border-radius:14px;background:var(--glass);border:1px solid var(--border)">
+        <p style="font-size:13px;color:var(--muted)">Be one of our first 10 founding clients and get your testimonial
+          featured here too. <a href="#contact" style="color:var(--r5);text-decoration:none">Start today →</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════ 6. FAQ ══════════════════════ -->
+  <section id="faq" style="padding:0">
+    <div class="sec">
+      <p class="sec-label rev">Common questions</p>
+      <h2 class="h2 rev2">FAQ — answered<br /><span>honestly</span></h2>
+      <div class="faq-grid rev3">
+        <div class="faq-item">
+          <p class="faq-q">Are these prices real — what's the catch?</p>
+          <p class="faq-a">No catch. We're a new studio building our reputation. Lower prices now means more reviews and
+            a stronger portfolio. You benefit from that directly.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">How long does a project actually take?</p>
+          <p class="faq-a">Starter landing pages: 5–7 days. Full websites: 10–14 days. Web apps: 3–4 weeks. We give you
+            a firm deadline before starting and we stick to it.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">Do I own the code after launch?</p>
+          <p class="faq-a">100%. Once payment is received, all code, assets, and design files are yours. No ongoing
+            fees, no lock-in, ever.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">How does the 50% founding discount work?</p>
+          <p class="faq-a">The first 10 clients who contact us get 50% off any plan — just tell us you're a founding
+            client and we apply the discount. No complex conditions.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">What do you need from me to get started?</p>
+          <p class="faq-a">A brief about your business, any inspiration sites you like, your logo if you have one, and
+            the content you want. We guide you through everything else.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">Do you work with clients outside Sri Lanka?</p>
+          <p class="faq-a">Absolutely. We work remotely with clients worldwide. PayPal, bank transfer, or Wise. Time
+            zones are never a problem — we respond fast.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">What if I need changes after launch?</p>
+          <p class="faq-a">Growth and Professional plans include 30–90 days post-launch support. After that, affordable
+            hourly or retainer options are available.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">Can you build the backend too?</p>
+          <p class="faq-a">Yes. Our Professional plan includes a full Node.js + PostgreSQL backend with admin dashboard,
+            auth, and API. We also offer backend-only projects.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="spec-line"></div>
+
+  <!-- ══════════════════════ 7. CONTACT ══════════════════════ -->
+  <section id="contact" style="background:var(--bg2);padding:0">
+    <div class="sec">
+      <p class="sec-label rev">Get in touch</p>
+      <h2 class="h2 rev2">Ready to build something<br /><span>extraordinary?</span></h2>
+      <p class="rev2" style="color:var(--muted);font-size:14px;max-width:500px;margin-top:12px;line-height:1.8">Don't
+        miss the founding offer. Fill in below and we'll reply within 24 hours. No obligation — just a friendly
+        conversation.</p>
+      <div class="cgrid" style="margin-top:44px">
+        <div class="c-info rev">
+          <div class="c-row glass"><svg class="c-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.5">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+              <polyline points="22,6 12,13 2,6" />
+            </svg>
+            <div>
+              <div class="c-lbl">Email</div>
+              <div class="c-val"><a href="mailto:hello@aura.studio">hello@aura.studio</a></div>
+            </div>
+          </div>
+          <div class="c-row glass"><svg class="c-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.5">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            <div>
+              <div class="c-lbl">Location</div>
+              <div class="c-val">Sri Lanka 🇱🇰 · Remote-first · Worldwide</div>
+            </div>
+          </div>
+          <div class="c-row glass"><svg class="c-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.5">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <div>
+              <div class="c-lbl">Response</div>
+              <div class="c-val" style="color:var(--r5)">Under 24 hours, guaranteed</div>
+            </div>
+          </div>
+          <div class="glass" style="padding:20px;border-radius:14px">
+            <div class="c-lbl" style="margin-bottom:8px">Founding offer</div>
+            <div style="font-size:13px;color:#ffe566;font-weight:600;margin-bottom:5px">🎉 50% off — first 10 clients
+              only</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.7">Contact now to lock in the discounted price
+              before spots fill up.</div>
+          </div>
+          <div>
+            <p class="c-lbl">Find us online</p>
+            <div class="socials"><a href="#" class="soc">GH</a><a href="#" class="soc">LI</a><a href="#"
+                class="soc">TW</a><a href="#" class="soc">BE</a></div>
+          </div>
+        </div>
+        <div class="cform rev2">
+          <div class="crow">
+            <div class="cf"><label>Your name</label><input id="f-name" type="text" placeholder="Jane Smith" /></div>
+            <div class="cf"><label>Email</label><input id="f-email" type="email" placeholder="jane@company.com" /></div>
+          </div>
+          <div class="cf"><label>What do you need?</label>
+            <select id="f-service">
+              <option value="">Select a service…</option>
+              <option>Starter — Landing page ($25 founding / $49 standard)</option>
+              <option>Growth — Full website ($99 founding / $199 standard)</option>
+              <option>Professional — Web app ($249 founding / $499 standard)</option>
+              <option>E-commerce store</option>
+              <option>3D / Interactive experience</option>
+              <option>Something custom</option>
+            </select>
+          </div>
+          <div class="crow">
+            <div class="cf"><label>Budget</label><input id="f-budget" type="text" placeholder="e.g. $25–$99" /></div>
+            <div class="cf"><label>Timeline</label><input id="f-timeline" type="text"
+                placeholder="e.g. ASAP / 2 weeks" /></div>
+          </div>
+          <div class="cf"><label>About your project</label><textarea id="f-msg"
+              placeholder="What are you building? Who is it for? What does success look like?"></textarea></div>
+          <button class="csub" onclick="sendForm()">Send message →</button>
+          <div id="form-ok">✓ Message sent! We'll reply within 24 hours.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="spec-line"></div>
+
+  <!-- ══════════════════════ 8. ABOUT — STORY ══════════════════════ -->
+  <section id="about">
+    <div class="sec">
+      <p class="sec-label rev">Our story</p>
+      <div class="about-intro-grid">
+        <div class="rev2">
+          <div class="about-tag">◆ Sri Lanka-based · Remote-first</div>
+          <h2 class="h2" style="margin-bottom:28px">From passion to<br /><span>purpose</span></h2>
+          <div class="about-nums">
+            <div class="abn glass">
+              <div class="abn-n">$25</div>
+              <div class="abn-l">Starting price — seriously</div>
+            </div>
+            <div class="abn glass">
+              <div class="abn-n">100%</div>
+              <div class="abn-l">On-time delivery record</div>
+            </div>
+            <div class="abn glass">
+              <div class="abn-n">24h</div>
+              <div class="abn-l">Reply guarantee, always</div>
+            </div>
+          </div>
+        </div>
+        <div class="about-text rev3">
+          <p>
+            AURA was founded with a single belief:
+            <strong>exceptional digital work shouldn’t be gatekept behind enterprise budgets.</strong>
+            We combine performance, design, and scalability to build solutions that don’t just look good, they deliver
+            real results.
+          </p>
+
+          <p>
+            We approach every project as a product, not just a website. That means focusing on
+            <strong>long-term value, seamless user experience, and measurable outcomes</strong>.
+            From initial concept to final deployment, every detail is engineered with precision, ensuring fast,
+            reliable, and impactful results.
+          </p>
+
+          <p>
+            Our team operates remotely, working with clients across global markets while maintaining
+            <strong>high standards in communication, speed, and execution</strong>.
+            We move fast, adapt quickly, and continuously refine our craft to stay ahead of the curve.
+          </p>
+
+          <p>
+            At AURA, we don’t just build for today,
+            <strong>we create systems designed to grow, scale, and perform in the real world.</strong>
+          </p>
+          <p style="margin-top:24px"><a href="#contact" class="btn-p" style="font-size:12px">Work with us →</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="spec-line"></div>
+
+  <!-- ══════════════════════ 9. ABOUT — VALUES ══════════════════════ -->
+  <section id="values">
+    <div class="sec">
+      <p class="sec-label rev">What we stand for</p>
+      <h2 class="h2 rev2">Built on principles,<br /><span>not promises</span></h2>
+      <p class="rev2" style="color:var(--muted);font-size:13px;max-width:500px;margin-top:12px;line-height:1.8">
+        These aren't buzzwords on a slide deck — they're the standards we hold ourselves to on every project, for every
+        client, without exception.</p>
+      <div class="vals-grid rev3">
+        <div class="val glass">
+          <div class="val-ico">⚡</div>
+          <div class="val-t">Speed without shortcuts</div>
+          <div class="val-d">We deliver fast — but never at the cost of quality, security, or accessibility. Tight
+            deadlines sharpen our focus; they don't lower our bar.</div>
+        </div>
+        <div class="val glass">
+          <div class="val-ico">🎯</div>
+          <div class="val-t">Obsessive precision</div>
+          <div class="val-d">Every pixel, every function, every interaction is deliberate. We sweat the details so you
+            don't have to — because the details are what separate good from great.</div>
+        </div>
+        <div class="val glass">
+          <div class="val-ico">🔍</div>
+          <div class="val-t">Radical transparency</div>
+          <div class="val-d">No hidden fees, no vague timelines, no corporate runaround. You always know what we're
+            building, how it's progressing, and exactly what you're paying for.</div>
+        </div>
+        <div class="val glass">
+          <div class="val-ico">🤝</div>
+          <div class="val-t">Long-term thinking</div>
+          <div class="val-d">We build relationships, not transactions. Our goal is to become the team you call first
+            — not just for one project, but for every milestone your business reaches.</div>
+        </div>
+        <div class="val glass">
+          <div class="val-ico">🌍</div>
+          <div class="val-t">Global mindset</div>
+          <div class="val-d">Based in Sri Lanka, working with clients across the world. Different time zones, markets,
+            and industries — we adapt seamlessly and communicate without friction, always.</div>
+        </div>
+        <div class="val glass">
+          <div class="val-ico">🚀</div>
+          <div class="val-t">Impact-driven</div>
+          <div class="val-d">We measure success by your outcomes — increased traffic, higher conversions, faster load
+            times, and systems that scale. Your growth is the metric that matters most to us.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="spec-line"></div>
+
+  <!-- ══════════════════════ 10. ABOUT — TEAM ══════════════════════ -->
+  <section id="team">
+    <div class="sec">
+      <p class="sec-label rev">The people</p>
+      <h2 class="h2 rev2">Small team,<br /><span>big output</span></h2>
+      <p class="rev2" style="color:var(--muted);font-size:13px;max-width:500px;margin-top:12px;line-height:1.8">
+        We're a tight-knit team of engineers and designers who care deeply about the craft. No bloated agency structure
+        — just <strong style="color:var(--text)">three skilled specialists</strong> who move fast, communicate clearly,
+        and hold each other to a high standard of execution.</p>
+      <div class="team-grid rev3">
+        <div class="tm glass">
+          <div class="tm-av c1">IN</div>
+          <div class="tm-name">Induwara Senevirathne</div>
+          <div class="tm-role">Founder · Full Stack Lead</div>
+          <div class="tm-bio">A results-driven Full Stack Developer leading the vision and execution of high-performance
+            digital products. With a strong command of modern web technologies, he specializes in building scalable,
+            conversion-focused applications that balance technical excellence with refined user experience. His approach
+            combines clean architecture, performance optimization, and strategic thinking to deliver solutions that
+            don’t just function, they perform.</div>
+          <div class="tm-tags">
+            <span class="stag">React</span><span class="stag">Node.js</span><span class="stag">Three.js</span><span
+              class="stag">AWS</span>
+          </div>
+        </div>
+        <div class="tm glass">
+          <div class="tm-av c2">DH</div>
+          <div class="tm-name">Danidu Herath</div>
+          <div class="tm-role">UI/UX Design</div>
+          <div class="tm-bio">A detail-oriented designer focused on crafting visually compelling and highly intuitive
+            interfaces. With a deep understanding of user behavior and modern design systems, he transforms complex
+            ideas into seamless digital experiences. His work ensures every interaction feels intentional, engaging, and
+            aligned with business goals.</div>
+          <div class="tm-tags">
+            <span class="stag">Figma</span><span class="stag">Design Systems</span><span class="stag">Motion</span>
+          </div>
+        </div>
+        <div class="tm glass">
+          <div class="tm-av c3">TS</div>
+          <div class="tm-name">Thevindu Senanayake</div>
+          <div class="tm-role">Backend Specialist</div>
+          <div class="tm-bio">A systems-focused backend developer dedicated to building secure, scalable, and efficient
+            infrastructures. With expertise in API design, database architecture, and performance tuning, he ensures
+            every product operates reliably under real-world demands. His work lays the foundation for stable,
+            future-ready applications.</div>
+          <div class="tm-tags">
+            <span class="stag">PostgreSQL</span><span class="stag">Docker</span><span class="stag">APIs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="spec-line"></div>
+
+  <!-- ══════════════════════ 11. ABOUT — PROCESS ══════════════════════ -->
+  <section id="process" style="padding:0">
+    <div class="sec">
+      <p class="sec-label rev">How we work</p>
+      <h2 class="h2 rev2">A process designed<br /><span>for clarity</span></h2>
+      <div class="proc-list rev3">
+        <div class="proc">
+          <div class="proc-n">01</div>
+          <div>
+            <div class="proc-t">Discovery &amp; brief</div>
+            <div class="proc-d">We start with a focused conversation about your business, goals, and target audience.
+              No lengthy questionnaires — just a clear understanding of what you need, what success looks like, and
+              what timeline works for you. This sets the foundation for everything that follows.</div>
+          </div>
+        </div>
+        <div class="proc">
+          <div class="proc-n">02</div>
+          <div>
+            <div class="proc-t">Design &amp; wireframe</div>
+            <div class="proc-d">Before a single line of code is written, we produce high-fidelity Figma designs so
+              you see exactly what you're getting. You review, request changes, and give sign-off — only then do we
+              move forward. No surprises, no wasted development time.</div>
+          </div>
+        </div>
+        <div class="proc">
+          <div class="proc-n">03</div>
+          <div>
+            <div class="proc-t">Build &amp; iterate</div>
+            <div class="proc-d">We build in focused sprints with regular check-ins so you always know where things
+              stand. Clean, semantic, performant code — no bloat, no shortcuts. Every component is crafted with
+              scalability and maintainability in mind from day one.</div>
+          </div>
+        </div>
+        <div class="proc">
+          <div class="proc-n">04</div>
+          <div>
+            <div class="proc-t">Test &amp; optimise</div>
+            <div class="proc-d">We run thorough cross-browser testing, mobile responsiveness checks, Lighthouse
+              performance audits, and on-page SEO validation before anything goes live. We don't ship until every
+              metric meets production standards — not just demo standards.</div>
+          </div>
+        </div>
+        <div class="proc">
+          <div class="proc-n">05</div>
+          <div>
+            <div class="proc-t">Launch &amp; support</div>
+            <div class="proc-d">We handle deployment to your chosen platform — Vercel, AWS, or your own hosting —
+              and remain fully available post-launch. Growth and Professional plans include dedicated support windows.
+              The relationship doesn't end at delivery; it's just getting started.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA PRISM -->
+  <div id="ctaprism">
+    <canvas id="cta-cv"></canvas>
+    <div class="cta-inner">
+      <h2 class="cta-h">Let's make your brand<br /><span>radiant.</span></h2>
+      <p class="cta-sub">Every great product starts with a single message. Yours could be next.</p>
+      <a class="cta-email" href="mailto:hello@aura.studio">hello@aura.studio</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="ft-grid">
+      <div><span class="ft-logo">AURA</span>
+        <p class="ft-tag">Precision in every pixel.<br />Power in every layer.<br />Based in Sri Lanka 🇱🇰</p>
+      </div>
+      <div>
+        <p class="ft-ct">Navigate</p>
+        <ul class="ft-links">
+          <li><a href="#hero">Home</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#work">Work</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="ft-ct">Services</p>
+        <ul class="ft-links">
+          <li><a href="#services">Web Design</a></li>
+          <li><a href="#services">Frontend Dev</a></li>
+          <li><a href="#services">Full Stack Apps</a></li>
+          <li><a href="#services">E-Commerce</a></li>
+          <li><a href="#services">3D & Creative</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="ft-ct">Studio</p>
+        <ul class="ft-links">
+          <li><a href="mailto:hello@aura.studio">hello@aura.studio</a></li>
+          <li><a href="#">GitHub</a></li>
+          <li><a href="#">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bot"><span class="ft-copy">© 2025 AURA Studio. All rights reserved.</span><span
+        class="avail">Accepting new clients — founding offer active</span></div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    const NOISE = `vec3 m3(vec3 x){return x-floor(x*(1./289.))*289.;}vec4 m4(vec4 x){return x-floor(x*(1./289.))*289.;}vec4 pm(vec4 x){return m4(((x*34.)+1.)*x);}vec4 ti(vec4 r){return 1.79284291400159-0.85373472095314*r;}float snoise(vec3 v){const vec2 C=vec2(1./6.,1./3.);const vec4 D=vec4(0.,.5,1.,2.);vec3 i=floor(v+dot(v,C.yyy));vec3 x0=v-i+dot(i,C.xxx);vec3 g=step(x0.yzx,x0.xyz);vec3 l=1.-g;vec3 i1=min(g.xyz,l.zxy);vec3 i2=max(g.xyz,l.zxy);vec3 x1=x0-i1+C.xxx;vec3 x2=x0-i2+C.yyy;vec3 x3=x0-D.yyy;i=m3(i);vec4 p=pm(pm(pm(i.z+vec4(0.,i1.z,i2.z,1.))+i.y+vec4(0.,i1.y,i2.y,1.))+i.x+vec4(0.,i1.x,i2.x,1.));float n_=.142857142857;vec3 ns=n_*D.wyz-D.xzx;vec4 j=p-49.*floor(p*ns.z*ns.z);vec4 x_=floor(j*ns.z);vec4 y_=floor(j-7.*x_);vec4 x=x_*ns.x+ns.yyyy;vec4 y=y_*ns.x+ns.yyyy;vec4 h=1.-abs(x)-abs(y);vec4 b0=vec4(x.xy,y.xy);vec4 b1=vec4(x.zw,y.zw);vec4 s0=floor(b0)*2.+1.;vec4 s1=floor(b1)*2.+1.;vec4 sh=-step(h,vec4(0.));vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;vec3 p0=vec3(a0.xy,h.x);vec3 p1=vec3(a0.zw,h.y);vec3 p2=vec3(a1.xy,h.z);vec3 p3=vec3(a1.zw,h.w);vec4 norm=ti(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;vec4 m=max(.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.);m=m*m;return 42.*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));}`;
+
+    function mkSphere(cv, W, H, N, R, bgC) {
+      const ren = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: !bgC });
+      ren.setSize(W, H); ren.setPixelRatio(Math.min(devicePixelRatio, 2));
+      if (bgC) ren.setClearColor(bgC, 1); else ren.setClearColor(0, 0);
+      const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(55, W / H, .1, 100); cam.position.z = 5.5 * (R / 2.1);
+      const pos = new Float32Array(N * 3), rnd = new Float32Array(N), tv = new Float32Array(N);
+      const phi = Math.PI * (3 - Math.sqrt(5));
+      for (let i = 0; i < N; i++) { const y = 1 - (i / (N - 1)) * 2, r = Math.sqrt(1 - y * y), t = phi * i; pos[i * 3] = Math.cos(t) * r * R; pos[i * 3 + 1] = y * R; pos[i * 3 + 2] = Math.sin(t) * r * R; rnd[i] = (Math.random() - .5) * 2; tv[i] = (y + 1) * .5; }
+      const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(pos, 3)); geo.setAttribute('aRnd', new THREE.BufferAttribute(rnd, 1)); geo.setAttribute('aTval', new THREE.BufferAttribute(tv, 1));
+      const uni = { uT: { value: 0 }, uMx: { value: new THREE.Vector2() } };
+      const mat = new THREE.ShaderMaterial({
+        vertexShader: NOISE + `uniform float uT;uniform vec2 uMx;attribute float aRnd,aTval;varying float vD,vTval;void main(){vec3 d=normalize(position);float mx=uMx.x*.25,my=uMx.y*.25;d=vec3(d.x*cos(mx)-d.z*sin(mx),d.y,d.x*sin(mx)+d.z*cos(mx));d=vec3(d.x,d.y*cos(my)-d.z*sin(my),d.y*sin(my)+d.z*cos(my));float w1=sin(d.x*4.2+d.y*3.1+uT*1.6)*.28;float w2=cos(d.y*3.5+d.z*4.1-uT*1.3)*.22;float n=snoise(d*2.0+uT*.18);float disp=(w1+w2)+n*.32+aRnd*.03;vD=disp;vTval=aTval;vec3 dp=normalize(position)*(${R}+disp*.55);vec4 mv=modelViewMatrix*vec4(dp,1.);gl_Position=projectionMatrix*mv;float sf=1.+smoothstep(-.3,.4,disp)*2.;gl_PointSize=clamp(sf*2.8*(300./-mv.z),1.,7.);}`,
+        fragmentShader: `uniform float uT;varying float vD,vTval;vec3 spectrum(float t){float h=mix(0.78,0.0,t);float s=.90;float l=mix(.25,.75,pow(t,.5));l=clamp(l,.15,.88);vec3 rgb=clamp(abs(mod(h*6.+vec3(0.,4.,2.),6.)-3.)-1.,0.,1.);return l+s*(rgb-.5)*(1.-abs(2.*l-1.));}void main(){vec2 co=gl_PointCoord-.5;float d=length(co);if(d>.5)discard;float a=pow(1.-smoothstep(0.,.5,d),1.4);float t=fract(vTval+uT*.04+vD*.15);vec3 col=spectrum(t);col=mix(col,vec3(1.),smoothstep(.6,1.,a)*smoothstep(.5,.9,vTval)*.5);gl_FragColor=vec4(col*a,a*.92);}`,
+        uniforms: uni, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
+      });
+      const pts = new THREE.Points(geo, mat); scene.add(pts);
+      return { ren, scene, cam, pts, uni };
+    }
+
+    // Hero
+    const W = window.innerWidth, H = window.innerHeight;
+    const heroS = mkSphere(document.getElementById('hero-cv'), W, H, 54000, 2.1, 0x04060f);
+    const bPos = new Float32Array(700 * 3); for (let i = 0; i < 700; i++) { const t = i / 700; bPos[i * 3] = -4 + t * 2.8 + (Math.random() - .5) * .1; bPos[i * 3 + 1] = 3.5 - t * 2.8 + (Math.random() - .5) * .1; bPos[i * 3 + 2] = (Math.random() - .5) * .25; }
+    const bGeo = new THREE.BufferGeometry(); bGeo.setAttribute('position', new THREE.BufferAttribute(bPos, 3));
+    heroS.scene.add(new THREE.Points(bGeo, new THREE.PointsMaterial({ color: 0xffffff, size: .04, transparent: true, opacity: .28, blending: THREE.AdditiveBlending })));
+    let tx = 0, ty = 0, mmx = 0, mmy = 0, ht = 0;
+    document.addEventListener('mousemove', e => { tx = (e.clientX / W - .5) * 2; ty = -(e.clientY / H - .5) * 2; });
+    (function heroTick() { requestAnimationFrame(heroTick); ht += .010; mmx += (tx - mmx) * .04; mmy += (ty - mmy) * .04; heroS.uni.uT.value = ht; heroS.uni.uMx.value.set(mmx, mmy); heroS.pts.rotation.y = ht * .04; heroS.pts.rotation.x = Math.sin(ht * .028) * .08; heroS.ren.render(heroS.scene, heroS.cam); })();
+    window.addEventListener('resize', () => { const nw = window.innerWidth, nh = window.innerHeight; heroS.cam.aspect = nw / nh; heroS.cam.updateProjectionMatrix(); heroS.ren.setSize(nw, nh); });
+
+    // Work sphere
+    const wkCv = document.getElementById('wk-cv');
+    const wkP = wkCv.parentElement;
+    const wkS = mkSphere(wkCv, wkP.clientWidth || 1200, 320, 20000, 1.5, 0x07091a);
+    let wVis = false, wt = 0;
+    new IntersectionObserver(e => { wVis = e[0].isIntersecting; }, { threshold: .1 }).observe(wkCv);
+    (function wTick() { requestAnimationFrame(wTick); if (!wVis) return; wt += .009; wkS.uni.uT.value = wt; wkS.pts.rotation.y = wt * .08; wkS.pts.rotation.x = Math.sin(wt * .055) * .06; wkS.ren.render(wkS.scene, wkS.cam); })();
+
+    // CTA prism fan
+    (function () {
+      const cv = document.getElementById('cta-cv'); if (!cv) return;
+      const wrap = cv.parentElement; const CW = wrap.clientWidth || window.innerWidth, CH = Math.max(wrap.clientHeight || 400, 400);
+      cv.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;';
+      const ren = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true });
+      ren.setSize(CW, CH); ren.setPixelRatio(Math.min(devicePixelRatio, 1.5)); ren.setClearColor(0x04060f, 1);
+      const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(65, CW / CH, .1, 50); cam.position.z = 4;
+      const cols = [[255, 107, 157], [255, 154, 92], [255, 229, 102], [127, 255, 131], [56, 240, 196], [88, 168, 255], [176, 102, 255]];
+      const grp = new THREE.Group();
+      cols.forEach((col, ci) => {
+        const N = 2000; const pos = new Float32Array(N * 3), ts = new Float32Array(N);
+        const angle = -0.55 + ci * (1.1 / 6);
+        for (let i = 0; i < N; i++) { const t = i / N, theta = angle + (Math.random() - .5) * .06, r = t * 3.4; pos[i * 3] = -1.5 + Math.cos(theta) * r; pos[i * 3 + 1] = Math.sin(theta) * r; pos[i * 3 + 2] = (Math.random() - .5) * .4; ts[i] = t; }
+        const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('aT', new THREE.BufferAttribute(ts, 1));
+        const m = new THREE.ShaderMaterial({ vertexShader: `attribute float aT;uniform float uTime;void main(){vec3 p=position;p.y+=sin(aT*8.+uTime*3.+${ci}.)*.055;vec4 mv=modelViewMatrix*vec4(p,1.);gl_Position=projectionMatrix*mv;gl_PointSize=clamp(1.8*(200./-mv.z),1.,4.);}`, fragmentShader: `uniform vec3 uC;void main(){vec2 c=gl_PointCoord-.5;if(length(c)>.5)discard;float a=1.-smoothstep(0.,.5,length(c));gl_FragColor=vec4(uC*a*.8,a*.7);}`, uniforms: { uTime: { value: 0 }, uC: { value: new THREE.Vector3(col[0] / 255, col[1] / 255, col[2] / 255) } }, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
+        const pts = new THREE.Points(g, m); pts.userData.m = m; grp.add(pts);
+      });
+      const wPos = new Float32Array(500 * 3); for (let i = 0; i < 500; i++) { const t = i / 500; wPos[i * 3] = -4 + t * 2.4; wPos[i * 3 + 1] = (Math.random() - .5) * .07; wPos[i * 3 + 2] = (Math.random() - .5) * .07; }
+      const wGeo = new THREE.BufferGeometry(); wGeo.setAttribute('position', new THREE.BufferAttribute(wPos, 3));
+      scene.add(new THREE.Points(wGeo, new THREE.PointsMaterial({ color: 0xffffff, size: .04, transparent: true, opacity: .5, blending: THREE.AdditiveBlending })));
+      scene.add(grp);
+      let vis = false; new IntersectionObserver(e => { vis = e[0].isIntersecting; }, { threshold: .05 }).observe(wrap);
+      let t = 0; (function tick() { requestAnimationFrame(tick); if (!vis) return; t += .007; grp.children.forEach(c => { c.userData.m.uniforms.uTime.value = t; }); grp.rotation.y = Math.sin(t * .2) * .08; grp.rotation.x = Math.cos(t * .15) * .04; grp.rotation.z = Math.sin(t * .1) * .03; ren.render(scene, cam); })();
+    })();
+
+    // Nav active + scroll
+    window.addEventListener('scroll', () => {
+      const nav = document.getElementById('nav');
+      nav.classList.toggle('solid', window.scrollY > 60);
+      const secs = ['services', 'work', 'pricing', 'testimonials', 'faq', 'contact', 'about', 'values', 'team', 'process'];
+      let cur = ''; secs.forEach(id => { const el = document.getElementById(id); if (el && window.scrollY >= el.offsetTop - 140) cur = id; });
+      document.querySelectorAll('.nav-links a').forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + cur); });
+    });
+
+    // Offer bar
+    function closeBar() {
+      document.getElementById('obar').style.display = 'none';
+      const nav = document.getElementById('nav'); nav.style.top = '0'; nav.classList.add('nobar');
+    }
+
+    // Cursor
+    const cur = document.getElementById('cur'), curR = document.getElementById('curR');
+    let cx = 0, cy = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { cx = e.clientX; cy = e.clientY; cur.style.left = cx + 'px'; cur.style.top = cy + 'px'; });
+    (function ct() { rx += (cx - rx) * .11; ry += (cy - ry) * .11; curR.style.left = rx + 'px'; curR.style.top = ry + 'px'; requestAnimationFrame(ct); })();
+    document.querySelectorAll('a,button,.srv,.pc,.glass,.soc,.faq-item,.val,.tm,.proc').forEach(el => {
+      el.addEventListener('mouseenter', () => { cur.style.width = '16px'; cur.style.height = '16px'; cur.style.background = '#38f0c4'; curR.style.transform = 'translate(-50%,-50%) scale(1.55)'; curR.style.opacity = '.7'; });
+      el.addEventListener('mouseleave', () => { cur.style.width = '9px'; cur.style.height = '9px'; cur.style.background = '#fff'; curR.style.transform = 'translate(-50%,-50%) scale(1)'; curR.style.opacity = '.4'; });
+    });
+
+    // 3D tilt
+    document.querySelectorAll('.srv,.pc,.glass,.faq-item,.tc').forEach(card => {
+      card.addEventListener('mousemove', e => { const r = card.getBoundingClientRect(); const x = ((e.clientX - r.left) / r.width - .5) * 10; const y = -((e.clientY - r.top) / r.height - .5) * 10; card.style.transition = 'transform .08s'; card.style.transform = `perspective(900px) rotateY(${x}deg) rotateX(${y}deg) translateZ(4px)`; });
+      card.addEventListener('mouseleave', () => { card.style.transition = 'transform .5s cubic-bezier(.23,1,.32,1)'; card.style.transform = 'perspective(900px) rotateY(0) rotateX(0) translateZ(0)'; });
+    });
+
+    // Form — connects to backend on port 4000
+    async function sendForm() {
+      const data = { name: document.getElementById('f-name').value, email: document.getElementById('f-email').value, service: document.getElementById('f-service').value, budget: document.getElementById('f-budget').value, timeline: document.getElementById('f-timeline').value, message: document.getElementById('f-msg').value };
+      if (!data.name || !data.email || !data.message) { alert('Please fill in name, email, and message.'); return; }
+      const btn = document.querySelector('.csub'); btn.textContent = 'Sending…'; btn.disabled = true;
+      try {
+        const res = await fetch('http://localhost:4000/api/messages', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+        if (res.ok) {
+          document.getElementById('form-ok').style.display = 'block';
+          document.getElementById('form-ok').textContent = "✓ Message received! We'll reply within 24 hours.";
+          ['f-name', 'f-email', 'f-service', 'f-budget', 'f-timeline', 'f-msg'].forEach(id => document.getElementById(id).value = '');
+          setTimeout(() => document.getElementById('form-ok').style.display = 'none', 6000);
+        } else { alert('Something went wrong. Please email us directly.'); }
+      } catch {
+        alert('Server connection failed. Could not send message.');
+      } finally {
+        btn.textContent = 'Send Message →'; btn.disabled = false;
+      }
+    }
+
+    // Reveal
+    const io = new IntersectionObserver(e => e.forEach(en => { if (en.isIntersecting) en.target.classList.add('in'); }), { threshold: .08 });
+    document.querySelectorAll('.rev,.rev2,.rev3').forEach(el => io.observe(el));
+
+    // Fetch dynamic pricing settings
+    async function loadDynamicPricing() {
+      try {
+        const res = await fetch('http://localhost:4000/api/pricing');
+        if (!res.ok) return;
+        const data = await res.json();
+        
+        // Update spots remaining
+        if (data.settings && data.settings.founding_spots) {
+          const s = document.getElementById('live-spots');
+          if (s) {
+            let spots = parseInt(data.settings.founding_spots, 10);
+            if (spots <= 0) s.parentElement.parentElement.style.display = 'none'; // Hide banner if 0
+            else s.textContent = spots;
+          }
+        }
+        
+        // If offer is toggled off from admin panel, hide the banner across the site
+        if (data.settings && data.settings.offer_active === 'false') {
+          const banners = document.querySelectorAll('.offer-banner, #obar');
+          banners.forEach(b => b.style.display = 'none');
+          document.querySelectorAll('.pc-tag').forEach(t => t.style.display = 'none'); // Hide the 50% discount tags
+        }
+      } catch (e) { console.log('Pricing API offline, using fallback defaults.'); }
+    }
+    loadDynamicPricing();
+  </script>
+</body>
+
+</html>

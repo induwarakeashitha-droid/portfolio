@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>AURA Admin — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#04060f;--bg2:#070a18;--bg3:#0a0e20;--bg4:#0d1128;
+  --glass:rgba(255,255,255,0.04);--glass2:rgba(255,255,255,0.08);
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --text:#f0eeff;--muted:rgba(220,215,255,0.45);--muted2:rgba(180,175,240,0.22);
+  --r5:#38f0c4;--r6:#58a8ff;--r3:#ffe566;--r1:#ff6b9d;--r2:#ff9a5c;--r4:#7fff83;--r7:#b066ff;
+  --sidebar:200px;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font-size:14px}
+a{text-decoration:none;cursor:pointer}
+
+/* ── LOGIN SCREEN ── */
+#login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:1000}
+.login-box{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:48px 40px;width:100%;max-width:400px;text-align:center}
+.login-logo{font-family:'Outfit',sans-serif;font-weight:800;font-size:24px;letter-spacing:.12em;color:#fff;margin-bottom:6px}
+.login-logo span{background:linear-gradient(135deg,#58a8ff,#38f0c4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.login-sub{font-size:12px;color:var(--muted);margin-bottom:32px;letter-spacing:.04em}
+.lf{display:flex;flex-direction:column;gap:12px;text-align:left}
+.lf label{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);margin-bottom:4px;display:block}
+.lf input{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:12px 14px;font-family:'Outfit',sans-serif;font-size:13px;border-radius:10px;outline:none;width:100%;transition:border-color .2s}
+.lf input:focus{border-color:rgba(88,168,255,.4)}
+.lf input::placeholder{color:var(--muted2)}
+.login-btn{background:linear-gradient(135deg,#58a8ff,#38f0c4);color:#04060f;padding:13px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:none;border-radius:100px;cursor:pointer;width:100%;transition:all .2s;margin-top:8px}
+.login-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(88,168,255,.3)}
+.login-err{color:#ff6b9d;font-size:12px;text-align:center;min-height:18px;margin-top:6px}
+.login-hint{font-size:11px;color:var(--muted2);margin-top:16px;line-height:1.6}
+
+/* ── LAYOUT ── */
+#app{display:none;height:100vh;overflow:hidden}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar);background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;overflow-y:auto}
+.main{margin-left:var(--sidebar);height:100vh;overflow-y:auto}
+
+/* Sidebar */
+.sb-logo{padding:24px 20px 20px;border-bottom:1px solid var(--border)}
+.sb-logo-txt{font-family:'Outfit',sans-serif;font-weight:800;font-size:18px;letter-spacing:.1em;color:#fff}
+.sb-logo-txt span{background:linear-gradient(135deg,#58a8ff,#38f0c4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sb-tag{font-size:10px;color:var(--muted2);letter-spacing:.08em;margin-top:3px}
+.sb-nav{padding:16px 10px;flex:1}
+.sb-section{font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted2);padding:0 10px;margin:16px 0 6px}
+.sb-link{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;color:var(--muted);font-size:13px;font-weight:500;transition:all .2s;cursor:pointer;margin-bottom:2px}
+.sb-link:hover{background:var(--glass);color:var(--text)}
+.sb-link.active{background:rgba(88,168,255,.12);color:var(--r6);border:1px solid rgba(88,168,255,.2)}
+.sb-link svg{width:16px;height:16px;flex-shrink:0}
+.sb-badge{margin-left:auto;background:var(--r1);color:#fff;font-size:9px;font-weight:700;padding:1px 7px;border-radius:100px;min-width:18px;text-align:center}
+.sb-bottom{padding:16px;border-top:1px solid var(--border)}
+.sb-user{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;background:var(--glass);border:1px solid var(--border)}
+.sb-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--r6),var(--r5));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;color:#04060f;flex-shrink:0}
+.sb-u-name{font-size:12px;font-weight:600;color:var(--text)}
+.sb-u-role{font-size:10px;color:var(--muted2)}
+.logout-btn{display:block;width:100%;margin-top:10px;padding:8px;background:none;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-family:'Outfit',sans-serif;font-size:11px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.logout-btn:hover{border-color:var(--r1);color:var(--r1)}
+
+/* Main area */
+.page-inner{display:none;padding:32px 36px;min-height:100vh}
+.page-inner.active{display:block}
+.page-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:14px}
+.page-title{font-family:'Outfit',sans-serif;font-weight:800;font-size:26px;letter-spacing:-.02em}
+.page-sub{font-size:13px;color:var(--muted);margin-top:3px}
+
+/* Cards */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:22px 24px;transition:border-color .2s}
+.card:hover{border-color:var(--border2)}
+
+/* Stat grid */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px 22px;transition:all .2s;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.stat-card:nth-child(1)::before{background:linear-gradient(90deg,var(--r6),var(--r5))}
+.stat-card:nth-child(2)::before{background:linear-gradient(90deg,var(--r5),var(--r4))}
+.stat-card:nth-child(3)::before{background:linear-gradient(90deg,var(--r3),var(--r2))}
+.stat-card:nth-child(4)::before{background:linear-gradient(90deg,var(--r7),var(--r6))}
+.stat-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.stat-lbl{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.stat-big{font-family:'Outfit',sans-serif;font-weight:800;font-size:36px;letter-spacing:-.04em;line-height:1}
+.stat-sub{font-size:11px;color:var(--muted);margin-top:6px}
+.stat-card:nth-child(1) .stat-big{background:linear-gradient(135deg,var(--r6),var(--r5));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-card:nth-child(2) .stat-big{background:linear-gradient(135deg,var(--r5),var(--r4));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-card:nth-child(3) .stat-big{background:linear-gradient(135deg,var(--r3),var(--r2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-card:nth-child(4) .stat-big{background:linear-gradient(135deg,var(--r7),var(--r6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* Table */
+.tbl-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse}
+thead{background:var(--bg3)}
+thead th{padding:12px 16px;text-align:left;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid var(--border);transition:background .15s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--glass)}
+tbody td{padding:13px 16px;font-size:13px;color:var(--text);vertical-align:middle}
+.td-muted{color:var(--muted);font-size:12px}
+.td-mono{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted)}
+
+/* Badges */
+.badge{display:inline-block;padding:3px 10px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.b-green{background:rgba(127,255,131,.12);color:#7fff83;border:1px solid rgba(127,255,131,.25)}
+.b-blue{background:rgba(88,168,255,.12);color:#58a8ff;border:1px solid rgba(88,168,255,.25)}
+.b-yellow{background:rgba(255,229,102,.12);color:#ffe566;border:1px solid rgba(255,229,102,.25)}
+.b-red{background:rgba(255,107,157,.12);color:#ff6b9d;border:1px solid rgba(255,107,157,.25)}
+.b-purple{background:rgba(176,102,255,.12);color:#b066ff;border:1px solid rgba(176,102,255,.25)}
+.b-gray{background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--border)}
+
+/* Action buttons */
+.action-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.act-btn{background:var(--glass);border:1px solid var(--border);color:var(--muted);padding:6px 13px;font-family:'Outfit',sans-serif;font-size:11px;font-weight:600;letter-spacing:.06em;border-radius:7px;cursor:pointer;transition:all .2s}
+.act-btn:hover{background:var(--glass2);color:var(--text);border-color:var(--border2)}
+.act-btn.danger:hover{border-color:rgba(255,107,157,.4);color:var(--r1)}
+.act-btn.primary{background:linear-gradient(135deg,rgba(88,168,255,.15),rgba(56,240,196,.12));border-color:rgba(88,168,255,.3);color:var(--r6)}
+.act-btn.primary:hover{background:linear-gradient(135deg,rgba(88,168,255,.25),rgba(56,240,196,.2))}
+
+/* Big add button */
+.add-btn{background:linear-gradient(135deg,var(--r6),var(--r5));color:#04060f;padding:10px 22px;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:none;border-radius:100px;cursor:pointer;transition:all .2s}
+.add-btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(88,168,255,.25)}
+
+/* Form */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-full{grid-column:1/-1}
+.ff{display:flex;flex-direction:column;gap:6px}
+.ff label{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2)}
+.ff input,.ff textarea,.ff select{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:11px 13px;font-family:'Outfit',sans-serif;font-size:13px;border-radius:9px;outline:none;resize:none;transition:border-color .2s;width:100%}
+.ff input:focus,.ff textarea:focus,.ff select:focus{border-color:rgba(88,168,255,.4);background:rgba(88,168,255,.03)}
+.ff input::placeholder,.ff textarea::placeholder{color:var(--muted2)}
+.ff textarea{min-height:90px}
+.ff select option{background:#0a0e20}
+.save-btn{background:linear-gradient(135deg,var(--r6),var(--r5));color:#04060f;padding:12px 28px;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:none;border-radius:100px;cursor:pointer;transition:all .2s}
+.save-btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(88,168,255,.25)}
+.cancel-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:12px 22px;font-family:'Outfit',sans-serif;font-size:12px;border-radius:100px;cursor:pointer;transition:all .2s}
+.cancel-btn:hover{border-color:var(--border2);color:var(--text)}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:500;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:32px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto}
+.modal-title{font-family:'Outfit',sans-serif;font-weight:700;font-size:20px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between}
+.modal-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:4px;transition:color .2s}
+.modal-close:hover{color:var(--r1)}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+
+/* Message detail */
+.msg-detail{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:18px;margin:14px 0;font-size:13px;color:var(--text);line-height:1.8}
+.msg-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.mm-item{background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:10px 13px}
+.mm-l{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:3px}
+.mm-v{font-size:13px;color:var(--text)}
+
+/* Quick actions panel */
+.qa-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.qa-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px 18px;cursor:pointer;transition:all .2s;text-align:center}
+.qa-card:hover{background:var(--glass2);border-color:var(--border2);transform:translateY(-2px)}
+.qa-ico{font-size:24px;margin-bottom:8px}
+.qa-t{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px}
+.qa-s{font-size:11px;color:var(--muted)}
+
+/* Activity feed */
+.activity-feed{display:flex;flex-direction:column;gap:0}
+.af-item{display:flex;align-items:flex-start;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)}
+.af-item:last-child{border-bottom:none}
+.af-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.af-content{flex:1}
+.af-txt{font-size:13px;color:var(--text);margin-bottom:2px}
+.af-time{font-size:11px;color:var(--muted)}
+
+/* Pricing editor */
+.price-row{display:grid;grid-template-columns:1fr 80px 80px auto;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--border)}
+.price-row:last-child{border-bottom:none}
+.pe-name{font-weight:600;font-size:13px}
+.pe-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.pe-inp{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:7px 10px;font-family:'DM Mono',monospace;font-size:13px;border-radius:8px;outline:none;width:100%;transition:border-color .2s}
+.pe-inp:focus{border-color:rgba(88,168,255,.4)}
+
+/* Toast */
+#toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px 20px;font-size:13px;color:var(--text);z-index:9999;transform:translateY(100px);opacity:0;transition:all .35s cubic-bezier(.23,1,.32,1);display:flex;align-items:center;gap:10px;max-width:320px}
+#toast.show{transform:translateY(0);opacity:1}
+#toast .t-ico{font-size:16px}
+
+/* Two col layout */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.two-col-main{grid-column:1/2}
+.two-col-side{grid-column:2/3}
+@media(max-width:900px){.two-col,.stat-grid,.form-grid,.qa-grid{grid-template-columns:1fr;}.two-col-main,.two-col-side{grid-column:auto}.sidebar{transform:translateX(-100%)}.main{margin-left:0}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">AUR<span>A</span></div>
+    <div class="login-sub">Admin Dashboard · Secure Access</div>
+    <div class="lf">
+      <div><label>Email</label><input id="l-email" type="email" placeholder="admin@aura.studio" value="admin@aura.studio"/></div>
+      <div><label>Password</label><input id="l-pass" type="password" placeholder="••••••••" value="admin123"/></div>
+      <button class="login-btn" onclick="doLogin()">Sign in to dashboard</button>
+      <div class="login-err" id="l-err"></div>
+    </div>
+    <p class="login-hint">Demo: email <strong>admin@aura.studio</strong> / password <strong>admin123</strong><br/>In production, this connects to your Node.js backend.</p>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-txt">AUR<span>A</span></div>
+      <div class="sb-tag">Admin Panel</div>
+    </div>
+    <div class="sb-nav">
+      <div class="sb-section">Main</div>
+      <div class="sb-link active" onclick="nav('dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</div>
+      <div class="sb-link" onclick="nav('messages')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Messages<span class="sb-badge" id="msg-count">3</span></div>
+
+      <div class="sb-section">Manage</div>
+      <div class="sb-link" onclick="nav('projects')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Projects</div>
+      <div class="sb-link" onclick="nav('clients')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>Clients</div>
+      <div class="sb-link" onclick="nav('pricing')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Pricing</div>
+
+      <div class="sb-section">Site</div>
+      <div class="sb-link" onclick="window.open('../index.html','_blank')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>View Site ↗</div>
+    </div>
+    <div class="sb-bottom">
+      <div class="sb-user">
+        <div class="sb-av">A</div>
+        <div><div class="sb-u-name">Admin</div><div class="sb-u-role">Super Admin</div></div>
+      </div>
+      <button class="logout-btn" onclick="logout()">Sign out</button>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+
+    <!-- DASHBOARD -->
+    <div class="page-inner active" id="pg-dashboard">
+      <div class="page-top">
+        <div><div class="page-title">Good morning 👋</div><div class="page-sub">Here's what's happening with AURA today.</div></div>
+        <button class="add-btn" onclick="nav('messages')">View messages →</button>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-lbl">Total enquiries</div><div class="stat-big">3</div><div class="stat-sub">+2 this week</div></div>
+        <div class="stat-card"><div class="stat-lbl">Active clients</div><div class="stat-big">1</div><div class="stat-sub">Pearl Heritage Tours</div></div>
+        <div class="stat-card"><div class="stat-lbl">Revenue (USD)</div><div class="stat-big">$99</div><div class="stat-sub">From 1 project</div></div>
+        <div class="stat-card"><div class="stat-lbl">Spots remaining</div><div class="stat-big">9</div><div class="stat-sub">Founding offer (50% off)</div></div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="qa-grid">
+        <div class="qa-card" onclick="nav('messages')"><div class="qa-ico">📬</div><div class="qa-t">View Messages</div><div class="qa-s">3 new enquiries</div></div>
+        <div class="qa-card" onclick="showModal('add-project')"><div class="qa-ico">🚀</div><div class="qa-t">Add Project</div><div class="qa-s">Showcase new work</div></div>
+        <div class="qa-card" onclick="nav('pricing')"><div class="qa-ico">💰</div><div class="qa-t">Edit Pricing</div><div class="qa-s">Update plan prices</div></div>
+        <div class="qa-card" onclick="nav('clients')"><div class="qa-ico">👥</div><div class="qa-t">Add Client</div><div class="qa-s">Record new client</div></div>
+        <div class="qa-card" onclick="window.open('../index.html','_blank')"><div class="qa-ico">🌐</div><div class="qa-t">View Website</div><div class="qa-s">See live site</div></div>
+        <div class="qa-card" onclick="showToast('✓ Stats refreshed!')"><div class="qa-ico">🔄</div><div class="qa-t">Refresh Stats</div><div class="qa-s">Sync with backend</div></div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <div class="card">
+            <div style="font-weight:700;font-size:15px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between">Recent Messages <span class="badge b-red">3 new</span></div>
+            <div class="activity-feed" id="dash-msgs"></div>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div style="font-weight:700;font-size:15px;margin-bottom:16px">Recent Activity</div>
+            <div class="activity-feed">
+              <div class="af-item"><div class="af-dot" style="background:var(--r5)"></div><div class="af-content"><div class="af-txt">Pearl Heritage Tours — project delivered</div><div class="af-time">2 days ago</div></div></div>
+              <div class="af-item"><div class="af-dot" style="background:var(--r6)"></div><div class="af-content"><div class="af-txt">New enquiry received from Jane Smith</div><div class="af-time">3 days ago</div></div></div>
+              <div class="af-item"><div class="af-dot" style="background:var(--r3)"></div><div class="af-content"><div class="af-txt">Pricing updated — Growth plan to $99</div><div class="af-time">1 week ago</div></div></div>
+              <div class="af-item"><div class="af-dot" style="background:var(--r7)"></div><div class="af-content"><div class="af-txt">Website launched 🎉</div><div class="af-time">1 week ago</div></div></div>
+              <div class="af-item"><div class="af-dot" style="background:var(--r2)"></div><div class="af-content"><div class="af-txt">Admin dashboard activated</div><div class="af-time">1 week ago</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MESSAGES -->
+    <div class="page-inner" id="pg-messages">
+      <div class="page-top">
+        <div><div class="page-title">Messages</div><div class="page-sub">Client enquiries from your contact form.</div></div>
+        <div class="action-row">
+          <button class="act-btn" onclick="filterMsgs('all')">All</button>
+          <button class="act-btn" onclick="filterMsgs('unread')">Unread</button>
+          <button class="act-btn danger" onclick="if(confirm('Delete all read messages?'))showToast('✓ Read messages cleared')">Clear read</button>
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Status</th><th>Name</th><th>Email</th><th>Service</th><th>Date</th><th>Actions</th></tr></thead>
+          <tbody id="msgs-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PROJECTS -->
+    <div class="page-inner" id="pg-projects">
+      <div class="page-top">
+        <div><div class="page-title">Projects</div><div class="page-sub">Manage your portfolio and work showcase.</div></div>
+        <button class="add-btn" onclick="showModal('add-project')">+ Add project</button>
+      </div>
+      <div class="tbl-wrap" style="margin-bottom:24px">
+        <table>
+          <thead><tr><th>Name</th><th>Client</th><th>Type</th><th>Status</th><th>Price</th><th>Actions</th></tr></thead>
+          <tbody id="proj-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CLIENTS -->
+    <div class="page-inner" id="pg-clients">
+      <div class="page-top">
+        <div><div class="page-title">Clients</div><div class="page-sub">Manage your client relationships.</div></div>
+        <button class="add-btn" onclick="showModal('add-client')">+ Add client</button>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Email</th><th>Industry</th><th>Status</th><th>Total Spent</th><th>Actions</th></tr></thead>
+          <tbody id="clients-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PRICING -->
+    <div class="page-inner" id="pg-pricing">
+      <div class="page-top">
+        <div><div class="page-title">Pricing</div><div class="page-sub">Edit your plan prices. Changes reflect on the website after save.</div></div>
+        <button class="save-btn" onclick="savePricing()">Save changes</button>
+      </div>
+      <div class="two-col">
+        <div>
+          <div class="card" style="margin-bottom:20px">
+            <div style="font-weight:700;font-size:15px;margin-bottom:6px">Founding offer</div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:18px">Control the 50% discount and spots remaining</div>
+            <div class="form-grid">
+              <div class="ff"><label>Discount %</label><input type="number" id="pe-discount" value="50" min="0" max="100"/></div>
+              <div class="ff"><label>Spots remaining</label><input type="number" id="pe-spots" value="9" min="0" max="10"/></div>
+              <div class="ff form-full"><label>Offer message</label><input type="text" id="pe-offer-msg" value="First 10 customers get 50% OFF any plan"/></div>
+            </div>
+          </div>
+          <div class="card">
+            <div style="font-weight:700;font-size:15px;margin-bottom:6px">Plan prices</div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:18px">Standard prices (before discount)</div>
+            <div id="price-rows"></div>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div style="font-weight:700;font-size:15px;margin-bottom:16px">Live preview</div>
+            <div id="price-preview"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal-box">
+    <div class="modal-title"><span id="modal-title-txt">Modal</span><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div id="modal-body"></div>
+    <div class="modal-actions" id="modal-actions"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"><span class="t-ico">✓</span><span id="toast-msg">Saved!</span></div>
+
+<script>
+// ── DATA STORE (replace with API calls to your Node.js backend) ──
+const DB = {
+  messages: [
+    {id:1,name:'Chaminda Perera',email:'chaminda@example.com',service:'Growth — Full website ($99)',budget:'$99',timeline:'2 weeks',message:'Hello! I need a full website for my travel business in Sri Lanka. I saw Pearl Heritage Tours and loved the design. Can you do something similar for me?',read:false,date:'2025-01-15'},
+    {id:2,name:'Nilusha Fernando',email:'nilusha@business.lk',service:'Starter — Landing page ($25)',budget:'$25',timeline:'ASAP',message:'Hi, I run a small bakery and need a simple landing page to show my menu and get orders. Budget is tight but I can pay $25.',read:false,date:'2025-01-14'},
+    {id:3,name:'Rajesh Kumar',email:'rajesh@startup.io',service:'Professional — Web app ($249)',budget:'$249',timeline:'1 month',message:'We need a full stack web app for our startup. We want the founding discount please. The app needs user auth, a dashboard, and payment integration.',read:false,date:'2025-01-13'},
+  ],
+  projects:[
+    {id:1,name:'Pearl Heritage Tours',client:'Pearl Heritage Tours',type:'Full Website',status:'delivered',price:'$99',url:'https://pearlheritagetours.com',desc:'Premium travel & tour operator website'},
+  ],
+  clients:[
+    {id:1,name:'Pearl Heritage Tours',email:'contact@pearlheritagetours.com',industry:'Travel & Tourism',status:'active',spent:'$99',date:'2025-01-01'},
+  ],
+  pricing:[
+    {id:1,name:'Starter',desc:'Landing page · 7-day delivery',standard:49,current:25,popular:false},
+    {id:2,name:'Growth',desc:'Full website · 14-day delivery',standard:199,current:99,popular:true},
+    {id:3,name:'Professional',desc:'Web application · 30-day delivery',standard:499,current:249,popular:false},
+  ]
+};
+
+// ── AUTH ──────────────────────────────────────────────────
+function doLogin(){
+  const email=document.getElementById('l-email').value;
+  const pass=document.getElementById('l-pass').value;
+  const err=document.getElementById('l-err');
+  if(email==='admin@aura.studio'&&pass==='admin123'){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='flex';
+    renderAll();
+    showToast('Welcome back, Admin 👋');
+  } else {
+    err.textContent='Invalid email or password.';
+    setTimeout(()=>err.textContent='',3000);
+  }
+}
+function logout(){if(confirm('Sign out?')){document.getElementById('app').style.display='none';document.getElementById('login-screen').style.display='flex';}}
+document.getElementById('l-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+
+// ── NAVIGATION ────────────────────────────────────────────
+function nav(page){
+  document.querySelectorAll('.sb-link').forEach(l=>l.classList.remove('active'));
+  document.querySelectorAll('.page-inner').forEach(p=>p.classList.remove('active'));
+  const link=document.querySelector(`.sb-link[onclick="nav('${page}')"]`);
+  if(link)link.classList.add('active');
+  const pg=document.getElementById('pg-'+page);
+  if(pg)pg.classList.add('active');
+}
+
+// ── RENDER ALL ────────────────────────────────────────────
+function renderAll(){renderMsgs();renderProjects();renderClients();renderPricing();renderDashMsgs();}
+
+// ── MESSAGES ─────────────────────────────────────────────
+function renderMsgs(){
+  const tbody=document.getElementById('msgs-tbody');
+  tbody.innerHTML=DB.messages.map(m=>`
+    <tr>
+      <td><span class="badge ${m.read?'b-gray':'b-blue'}">${m.read?'Read':'New'}</span></td>
+      <td style="font-weight:600">${m.name}</td>
+      <td class="td-mono">${m.email}</td>
+      <td class="td-muted">${m.service||'—'}</td>
+      <td class="td-mono">${m.date}</td>
+      <td><div class="action-row">
+        <button class="act-btn primary" onclick="viewMsg(${m.id})">View</button>
+        <button class="act-btn" onclick="markRead(${m.id})">${m.read?'Mark unread':'Mark read'}</button>
+        <button class="act-btn danger" onclick="deleteMsg(${m.id})">Delete</button>
+      </div></td>
+    </tr>`).join('');
+  const unread=DB.messages.filter(m=>!m.read).length;
+  document.getElementById('msg-count').textContent=unread;
+  document.getElementById('msg-count').style.display=unread?'':'none';
+}
+function renderDashMsgs(){
+  const el=document.getElementById('dash-msgs');
+  el.innerHTML=DB.messages.slice(0,4).map(m=>`
+    <div class="af-item" onclick="nav('messages');viewMsg(${m.id})" style="cursor:pointer">
+      <div class="af-dot" style="background:${m.read?'var(--muted2)':'var(--r6)'}"></div>
+      <div class="af-content">
+        <div class="af-txt"><strong>${m.name}</strong> — ${m.service||'General enquiry'}</div>
+        <div class="af-time">${m.email} · ${m.date}</div>
+      </div>
+    </div>`).join('');
+}
+function viewMsg(id){
+  const m=DB.messages.find(x=>x.id===id);if(!m)return;
+  openModal('Message from '+m.name,`
+    <div class="msg-meta">
+      <div class="mm-item"><div class="mm-l">Name</div><div class="mm-v">${m.name}</div></div>
+      <div class="mm-item"><div class="mm-l">Email</div><div class="mm-v"><a href="mailto:${m.email}" style="color:var(--r5)">${m.email}</a></div></div>
+      <div class="mm-item"><div class="mm-l">Service</div><div class="mm-v">${m.service||'—'}</div></div>
+      <div class="mm-item"><div class="mm-l">Budget</div><div class="mm-v">${m.budget||'—'}</div></div>
+      <div class="mm-item"><div class="mm-l">Timeline</div><div class="mm-v">${m.timeline||'—'}</div></div>
+      <div class="mm-item"><div class="mm-l">Date</div><div class="mm-v">${m.date}</div></div>
+    </div>
+    <div class="msg-detail">${m.message}</div>`,
+    `<button class="save-btn" onclick="window.open('mailto:${m.email}?subject=Re: Your AURA enquiry')">Reply via email ↗</button>
+     <button class="cancel-btn" onclick="markRead(${id});closeModal()">Mark as read & close</button>`);
+}
+function markRead(id){
+  const m=DB.messages.find(x=>x.id===id);if(m){m.read=!m.read;renderMsgs();renderDashMsgs();showToast(m.read?'Marked as read':'Marked as unread');}
+}
+function deleteMsg(id){
+  if(!confirm('Delete this message?'))return;
+  DB.messages=DB.messages.filter(x=>x.id!==id);renderMsgs();renderDashMsgs();showToast('✓ Message deleted');
+}
+function filterMsgs(type){
+  if(type==='unread')DB.messages.sort((a,b)=>a.read-b.read);
+  else DB.messages.sort((a,b)=>b.id-a.id);
+  renderMsgs();
+}
+
+// ── PROJECTS ─────────────────────────────────────────────
+function renderProjects(){
+  const tbody=document.getElementById('proj-tbody');
+  tbody.innerHTML=DB.projects.map(p=>`
+    <tr>
+      <td style="font-weight:600">${p.name}<div class="td-muted">${p.desc}</div></td>
+      <td class="td-muted">${p.client}</td>
+      <td><span class="badge b-blue">${p.type}</span></td>
+      <td><span class="badge ${p.status==='delivered'?'b-green':'b-yellow'}">${p.status}</span></td>
+      <td class="td-mono" style="color:var(--r5)">${p.price}</td>
+      <td><div class="action-row">
+        <button class="act-btn primary" onclick="editProject(${p.id})">Edit</button>
+        ${p.url?`<button class="act-btn" onclick="window.open('${p.url}','_blank')">View site ↗</button>`:''}
+        <button class="act-btn danger" onclick="deleteProject(${p.id})">Delete</button>
+      </div></td>
+    </tr>`).join('');
+}
+function addProject(){
+  const name=document.getElementById('np-name').value;
+  const client=document.getElementById('np-client').value;
+  const type=document.getElementById('np-type').value;
+  const status=document.getElementById('np-status').value;
+  const price=document.getElementById('np-price').value;
+  const url=document.getElementById('np-url').value;
+  const desc=document.getElementById('np-desc').value;
+  if(!name){alert('Project name required');return;}
+  DB.projects.push({id:Date.now(),name,client,type,status,price,url,desc});
+  closeModal();renderProjects();showToast('✓ Project added!');
+}
+function editProject(id){
+  const p=DB.projects.find(x=>x.id===id);if(!p)return;
+  openModal('Edit project',`
+    <div class="form-grid">
+      <div class="ff"><label>Project name</label><input id="ep-name" value="${p.name}"/></div>
+      <div class="ff"><label>Client name</label><input id="ep-client" value="${p.client}"/></div>
+      <div class="ff"><label>Type</label><input id="ep-type" value="${p.type}"/></div>
+      <div class="ff"><label>Status</label><select id="ep-status"><option ${p.status==='in progress'?'selected':''}>in progress</option><option ${p.status==='delivered'?'selected':''}>delivered</option><option ${p.status==='on hold'?'selected':''}>on hold</option></select></div>
+      <div class="ff"><label>Price (USD)</label><input id="ep-price" value="${p.price}"/></div>
+      <div class="ff"><label>Live URL</label><input id="ep-url" value="${p.url||''}"/></div>
+      <div class="ff form-full"><label>Short description</label><input id="ep-desc" value="${p.desc}"/></div>
+    </div>`,
+    `<button class="save-btn" onclick="saveProject(${id})">Save changes</button><button class="cancel-btn" onclick="closeModal()">Cancel</button>`);
+}
+function saveProject(id){
+  const p=DB.projects.find(x=>x.id===id);if(!p)return;
+  p.name=document.getElementById('ep-name').value;p.client=document.getElementById('ep-client').value;
+  p.type=document.getElementById('ep-type').value;p.status=document.getElementById('ep-status').value;
+  p.price=document.getElementById('ep-price').value;p.url=document.getElementById('ep-url').value;
+  p.desc=document.getElementById('ep-desc').value;
+  closeModal();renderProjects();showToast('✓ Project updated!');
+}
+function deleteProject(id){if(!confirm('Delete this project?'))return;DB.projects=DB.projects.filter(x=>x.id!==id);renderProjects();showToast('✓ Project deleted');}
+
+// ── CLIENTS ──────────────────────────────────────────────
+function renderClients(){
+  const tbody=document.getElementById('clients-tbody');
+  tbody.innerHTML=DB.clients.map(c=>`
+    <tr>
+      <td style="font-weight:600">${c.name}</td>
+      <td class="td-mono"><a href="mailto:${c.email}" style="color:var(--r5)">${c.email}</a></td>
+      <td class="td-muted">${c.industry}</td>
+      <td><span class="badge ${c.status==='active'?'b-green':'b-gray'}">${c.status}</span></td>
+      <td class="td-mono" style="color:var(--r5)">${c.spent}</td>
+      <td><div class="action-row">
+        <button class="act-btn primary" onclick="editClient(${c.id})">Edit</button>
+        <button class="act-btn danger" onclick="deleteClient(${c.id})">Delete</button>
+      </div></td>
+    </tr>`).join('');
+}
+function addClient(){
+  const name=document.getElementById('nc-name').value;
+  const email=document.getElementById('nc-email').value;
+  const industry=document.getElementById('nc-industry').value;
+  const spent=document.getElementById('nc-spent').value;
+  if(!name||!email){alert('Name and email required');return;}
+  DB.clients.push({id:Date.now(),name,email,industry,status:'active',spent:spent||'$0',date:new Date().toISOString().split('T')[0]});
+  closeModal();renderClients();showToast('✓ Client added!');
+}
+function editClient(id){
+  const c=DB.clients.find(x=>x.id===id);if(!c)return;
+  openModal('Edit client',`
+    <div class="form-grid">
+      <div class="ff"><label>Client name</label><input id="ec-name" value="${c.name}"/></div>
+      <div class="ff"><label>Email</label><input id="ec-email" value="${c.email}"/></div>
+      <div class="ff"><label>Industry</label><input id="ec-industry" value="${c.industry}"/></div>
+      <div class="ff"><label>Status</label><select id="ec-status"><option ${c.status==='active'?'selected':''}>active</option><option ${c.status==='inactive'?'selected':''}>inactive</option></select></div>
+      <div class="ff form-full"><label>Total spent (USD)</label><input id="ec-spent" value="${c.spent}"/></div>
+    </div>`,
+    `<button class="save-btn" onclick="saveClient(${id})">Save changes</button><button class="cancel-btn" onclick="closeModal()">Cancel</button>`);
+}
+function saveClient(id){
+  const c=DB.clients.find(x=>x.id===id);if(!c)return;
+  c.name=document.getElementById('ec-name').value;c.email=document.getElementById('ec-email').value;
+  c.industry=document.getElementById('ec-industry').value;c.status=document.getElementById('ec-status').value;
+  c.spent=document.getElementById('ec-spent').value;
+  closeModal();renderClients();showToast('✓ Client updated!');
+}
+function deleteClient(id){if(!confirm('Delete this client?'))return;DB.clients=DB.clients.filter(x=>x.id!==id);renderClients();showToast('✓ Client removed');}
+
+// ── PRICING ──────────────────────────────────────────────
+function renderPricing(){
+  document.getElementById('price-rows').innerHTML=DB.pricing.map(p=>`
+    <div class="price-row">
+      <div><div class="pe-name">${p.name}</div><div class="pe-sub">${p.desc}</div></div>
+      <div><div class="td-muted" style="font-size:10px;margin-bottom:4px">Standard</div><input class="pe-inp" id="pe-std-${p.id}" type="number" value="${p.standard}" onchange="updatePricePreview()"/></div>
+      <div><div style="font-size:10px;color:var(--r5);margin-bottom:4px">Founder</div><input class="pe-inp" id="pe-cur-${p.id}" type="number" value="${p.current}" onchange="updatePricePreview()"/></div>
+      <div><span class="badge ${p.popular?'b-blue':'b-gray'}">${p.popular?'Popular':'—'}</span></div>
+    </div>`).join('');
+  updatePricePreview();
+}
+function updatePricePreview(){
+  const discount=document.getElementById('pe-discount')?.value||50;
+  const spots=document.getElementById('pe-spots')?.value||9;
+  document.getElementById('price-preview').innerHTML=`
+    <div style="font-size:12px;color:var(--muted);margin-bottom:16px">Preview of pricing section on your website:</div>
+    ${DB.pricing.map(p=>{
+      const std=document.getElementById('pe-std-'+p.id)?.value||p.standard;
+      const cur=document.getElementById('pe-cur-'+p.id)?.value||p.current;
+      return `<div style="border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px;${p.popular?'border-color:rgba(88,168,255,.4);background:rgba(88,168,255,.04)':''}">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <span style="font-weight:700;font-size:13px">${p.name}</span>
+          ${p.popular?'<span class="badge b-blue">Popular</span>':''}
+        </div>
+        <div style="font-size:10px;color:var(--muted2);text-decoration:line-through">was $${std}</div>
+        <div style="font-family:\'DM Mono\',monospace;font-size:28px;font-weight:800;color:${p.popular?'var(--r6)':'#fff'}">$${cur}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px">Founding discount · ${discount}% off</div>
+      </div>`;
+    }).join('')}
+    <div style="font-size:12px;color:var(--r3);margin-top:10px">🎉 ${spots} founding spots remaining</div>`;
+}
+function savePricing(){
+  DB.pricing.forEach(p=>{
+    const std=document.getElementById('pe-std-'+p.id);
+    const cur=document.getElementById('pe-cur-'+p.id);
+    if(std)p.standard=Number(std.value);
+    if(cur)p.current=Number(cur.value);
+  });
+  showToast('✓ Pricing saved! Connect backend to persist changes.');
+}
+
+// ── MODALS ────────────────────────────────────────────────
+function showModal(type){
+  if(type==='add-project'){
+    openModal('Add new project',`
+      <div class="form-grid">
+        <div class="ff"><label>Project name</label><input id="np-name" placeholder="e.g. Pearl Heritage Tours"/></div>
+        <div class="ff"><label>Client name</label><input id="np-client" placeholder="e.g. Pearl Heritage Tours"/></div>
+        <div class="ff"><label>Type</label><input id="np-type" placeholder="e.g. Full Website"/></div>
+        <div class="ff"><label>Status</label><select id="np-status"><option>in progress</option><option>delivered</option><option>on hold</option></select></div>
+        <div class="ff"><label>Price (USD)</label><input id="np-price" placeholder="e.g. $99"/></div>
+        <div class="ff"><label>Live URL</label><input id="np-url" placeholder="https://..."/></div>
+        <div class="ff form-full"><label>Short description</label><input id="np-desc" placeholder="One line about the project"/></div>
+      </div>`,
+      `<button class="save-btn" onclick="addProject()">Add project</button><button class="cancel-btn" onclick="closeModal()">Cancel</button>`);
+  }
+  if(type==='add-client'){
+    openModal('Add new client',`
+      <div class="form-grid">
+        <div class="ff"><label>Client / Business name</label><input id="nc-name" placeholder="e.g. Pearl Heritage Tours"/></div>
+        <div class="ff"><label>Email</label><input id="nc-email" placeholder="contact@business.com"/></div>
+        <div class="ff"><label>Industry</label><input id="nc-industry" placeholder="e.g. Travel & Tourism"/></div>
+        <div class="ff"><label>Total spent (USD)</label><input id="nc-spent" placeholder="e.g. $99"/></div>
+      </div>`,
+      `<button class="save-btn" onclick="addClient()">Add client</button><button class="cancel-btn" onclick="closeModal()">Cancel</button>`);
+  }
+}
+function openModal(title,body,actions=''){
+  document.getElementById('modal-title-txt').textContent=title;
+  document.getElementById('modal-body').innerHTML=body;
+  document.getElementById('modal-actions').innerHTML=actions;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
+
+// ── TOAST ─────────────────────────────────────────────────
+function showToast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// Pricing discount input listener
+document.addEventListener('change',e=>{if(e.target.id==='pe-discount'||e.target.id==='pe-spots')updatePricePreview();});
+</script>
+</body>
+</html>
