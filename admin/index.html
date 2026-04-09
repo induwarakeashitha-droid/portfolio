@@ -1,572 +1,1219 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>AURA Admin — Studio Dashboard</title>
   <!-- NO meta description — intentionally excluded so search engines won't index -->
   <meta name="robots" content="noindex, nofollow" />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Mono:wght@300;400&display=swap"
+    rel="stylesheet" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
-    :root {
-      --bg: #04060f; --bg2: #070a18; --bg3: #0a0e20; --bg4: #0d1128;
-      --glass: rgba(255,255,255,0.04); --glass2: rgba(255,255,255,0.08);
-      --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.14);
-      --text: #f0eeff; --muted: rgba(220,215,255,0.45); --muted2: rgba(180,175,240,0.22);
-      --r1: #ff6b9d; --r2: #ff9a5c; --r3: #ffe566; --r4: #7fff83;
-      --r5: #38f0c4; --r6: #58a8ff; --r7: #b066ff;
-      --red: #ff4d6d; --green: #38f0c4; --yellow: #ffe566;
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
     }
-    html { scroll-behavior: smooth }
-    body { background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; font-size: 14px; line-height: 1.6 }
+
+    :root {
+      --bg: #04060f;
+      --bg2: #070a18;
+      --bg3: #0a0e20;
+      --bg4: #0d1128;
+      --glass: rgba(255, 255, 255, 0.04);
+      --glass2: rgba(255, 255, 255, 0.08);
+      --border: rgba(255, 255, 255, 0.07);
+      --border2: rgba(255, 255, 255, 0.14);
+      --text: #f0eeff;
+      --muted: rgba(220, 215, 255, 0.45);
+      --muted2: rgba(180, 175, 240, 0.22);
+      --r1: #ff6b9d;
+      --r2: #ff9a5c;
+      --r3: #ffe566;
+      --r4: #7fff83;
+      --r5: #38f0c4;
+      --r6: #58a8ff;
+      --r7: #b066ff;
+      --red: #ff4d6d;
+      --green: #38f0c4;
+      --yellow: #ffe566;
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      line-height: 1.6
+    }
 
     /* ── LOGIN OVERLAY ── */
     #login-overlay {
-      position: fixed; inset: 0; z-index: 9000;
+      position: fixed;
+      inset: 0;
+      z-index: 9000;
       background: var(--bg);
-      display: flex; align-items: center; justify-content: center;
-      flex-direction: column; gap: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0;
     }
+
     .login-box {
-      background: var(--bg2); border: 1px solid var(--border2);
-      border-radius: 24px; padding: 52px 48px; width: 420px; max-width: 92vw;
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 24px;
+      padding: 52px 48px;
+      width: 420px;
+      max-width: 92vw;
       text-align: center;
-      box-shadow: 0 40px 100px rgba(0,0,0,.6), 0 0 0 1px rgba(88,168,255,.08);
+      box-shadow: 0 40px 100px rgba(0, 0, 0, .6), 0 0 0 1px rgba(88, 168, 255, .08);
     }
-    .login-logo { font-family: 'Outfit',sans-serif; font-weight:800; font-size:28px; letter-spacing:.12em; color:#fff; margin-bottom:6px }
-    .login-sub { font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted2); margin-bottom:36px }
-    .login-label { display:block; font-size:10px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--muted2); text-align:left; margin-bottom:7px }
+
+    .login-logo {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 28px;
+      letter-spacing: .12em;
+      color: #fff;
+      margin-bottom: 6px
+    }
+
+    .login-sub {
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted2);
+      margin-bottom: 36px
+    }
+
+    .login-label {
+      display: block;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted2);
+      text-align: left;
+      margin-bottom: 7px
+    }
+
     .login-input {
-      width: 100%; background: var(--bg3); border: 1px solid var(--border);
-      color: var(--text); padding: 14px 16px; font-family:'Outfit',sans-serif; font-size:13px;
-      border-radius: 10px; outline: none; transition: border-color .2s; margin-bottom:18px;
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 14px 16px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      border-radius: 10px;
+      outline: none;
+      transition: border-color .2s;
+      margin-bottom: 18px;
       letter-spacing: .1em;
     }
-    .login-input:focus { border-color: rgba(88,168,255,.45) }
-    .login-btn {
-      width: 100%; background: linear-gradient(135deg, var(--r6), var(--r5));
-      color: #04060f; padding: 14px; font-family:'Outfit',sans-serif; font-size:12px;
-      font-weight: 700; letter-spacing:.1em; text-transform:uppercase; border:none;
-      border-radius:100px; cursor:pointer; transition:all .25s; margin-top:4px;
+
+    .login-input:focus {
+      border-color: rgba(88, 168, 255, .45)
     }
-    .login-btn:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(88,168,255,.3) }
-    .login-err { color: var(--red); font-size:12px; margin-top:14px; min-height:18px }
-    .login-hint { font-size:11px; color:var(--muted2); margin-top:20px }
+
+    .login-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--r6), var(--r5));
+      color: #04060f;
+      padding: 14px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all .25s;
+      margin-top: 4px;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(88, 168, 255, .3)
+    }
+
+    .login-err {
+      color: var(--red);
+      font-size: 12px;
+      margin-top: 14px;
+      min-height: 18px
+    }
+
+    .login-hint {
+      font-size: 11px;
+      color: var(--muted2);
+      margin-top: 20px
+    }
 
     /* ── DASHBOARD ── */
-    #dashboard { display: none; min-height: 100vh }
+    #dashboard {
+      display: none;
+      min-height: 100vh
+    }
 
     /* Sidebar */
     .sidebar {
-      position: fixed; top: 0; left: 0; bottom: 0; width: 240px;
-      background: var(--bg2); border-right: 1px solid var(--border);
-      display: flex; flex-direction: column; z-index: 100;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 240px;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
     }
-    .sb-logo { padding: 28px 24px 20px; border-bottom: 1px solid var(--border) }
-    .sb-logo-t { font-family:'Outfit',sans-serif; font-weight:800; font-size:18px; letter-spacing:.12em; color:#fff }
-    .sb-logo-s { font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted2); margin-top:2px }
-    .sb-nav { flex:1; padding: 20px 12px; display:flex; flex-direction:column; gap:2px }
+
+    .sb-logo {
+      padding: 28px 24px 20px;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .sb-logo-t {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: .12em;
+      color: #fff
+    }
+
+    .sb-logo-s {
+      font-size: 9px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted2);
+      margin-top: 2px
+    }
+
+    .sb-nav {
+      flex: 1;
+      padding: 20px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px
+    }
+
     .sb-link {
-      display: flex; align-items: center; gap: 11px; padding: 10px 14px;
-      border-radius: 10px; font-size:12px; font-weight:500; color:var(--muted);
-      cursor:pointer; transition:all .2s; user-select:none;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .2s;
+      user-select: none;
     }
-    .sb-link:hover { background: var(--glass); color:#fff }
-    .sb-link.active { background: linear-gradient(135deg,rgba(88,168,255,.14),rgba(56,240,196,.10)); color:#fff; border:1px solid rgba(88,168,255,.2) }
-    .sb-link .sb-ico { font-size:16px; width:20px; text-align:center }
-    .sb-section { font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted2); padding:16px 14px 6px; margin-top:8px }
-    .sb-bottom { padding: 16px 12px; border-top:1px solid var(--border) }
-    .sb-user { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px }
-    .sb-av { width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,var(--r6),var(--r5)); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:11px; color:#04060f; flex-shrink:0 }
-    .sb-uname { font-size:12px; font-weight:600 }
-    .sb-urole { font-size:10px; color:var(--muted); margin-top:1px }
-    .logout-btn { width:100%; margin-top:8px; background:var(--glass); border:1px solid var(--border); color:var(--muted); padding:8px; border-radius:8px; font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; cursor:pointer; transition:all .2s }
-    .logout-btn:hover { background:rgba(255,77,109,.12); border-color:rgba(255,77,109,.3); color:var(--red) }
+
+    .sb-link:hover {
+      background: var(--glass);
+      color: #fff
+    }
+
+    .sb-link.active {
+      background: linear-gradient(135deg, rgba(88, 168, 255, .14), rgba(56, 240, 196, .10));
+      color: #fff;
+      border: 1px solid rgba(88, 168, 255, .2)
+    }
+
+    .sb-link .sb-ico {
+      font-size: 16px;
+      width: 20px;
+      text-align: center
+    }
+
+    .sb-section {
+      font-size: 9px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted2);
+      padding: 16px 14px 6px;
+      margin-top: 8px
+    }
+
+    .sb-bottom {
+      padding: 16px 12px;
+      border-top: 1px solid var(--border)
+    }
+
+    .sb-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px
+    }
+
+    .sb-av {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--r6), var(--r5));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 11px;
+      color: #04060f;
+      flex-shrink: 0
+    }
+
+    .sb-uname {
+      font-size: 12px;
+      font-weight: 600
+    }
+
+    .sb-urole {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 1px
+    }
+
+    .logout-btn {
+      width: 100%;
+      margin-top: 8px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 8px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all .2s
+    }
+
+    .logout-btn:hover {
+      background: rgba(255, 77, 109, .12);
+      border-color: rgba(255, 77, 109, .3);
+      color: var(--red)
+    }
 
     /* Main content */
-    .main { margin-left: 240px; padding: 36px 40px; min-height: 100vh }
-    .page { display:none }
-    .page.active { display:block }
+    .main {
+      margin-left: 240px;
+      padding: 36px 40px;
+      min-height: 100vh
+    }
+
+    .page {
+      display: none
+    }
+
+    .page.active {
+      display: block
+    }
 
     /* Top bar */
-    .top-bar { display:flex; align-items:center; justify-content:space-between; margin-bottom:36px }
-    .top-title { font-family:'Outfit',sans-serif; font-weight:800; font-size:26px; letter-spacing:-.02em }
-    .top-title span { background:linear-gradient(135deg,var(--r6),var(--r5)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text }
-    .top-sub { font-size:12px; color:var(--muted); margin-top:3px }
-    .top-time { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted2); background:var(--glass); border:1px solid var(--border); padding:8px 14px; border-radius:8px }
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 36px
+    }
+
+    .top-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 26px;
+      letter-spacing: -.02em
+    }
+
+    .top-title span {
+      background: linear-gradient(135deg, var(--r6), var(--r5));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text
+    }
+
+    .top-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px
+    }
+
+    .top-time {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted2);
+      background: var(--glass);
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 8px
+    }
 
     /* Stat cards */
-    .stat-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:32px }
-    .stat-card { background:var(--bg2); border:1px solid var(--border); border-radius:16px; padding:24px 22px; transition:border-color .25s }
-    .stat-card:hover { border-color:var(--border2) }
-    .stat-ico { font-size:22px; margin-bottom:12px }
-    .stat-n { font-family:'Outfit',sans-serif; font-weight:800; font-size:32px; letter-spacing:-.04em; line-height:1 }
-    .stat-n.blue { background:linear-gradient(135deg,var(--r6),var(--r5)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text }
-    .stat-n.green { background:linear-gradient(135deg,var(--r5),var(--r4)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text }
-    .stat-n.purple { background:linear-gradient(135deg,var(--r7),var(--r6)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text }
-    .stat-n.yellow { background:linear-gradient(135deg,var(--r3),var(--r2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text }
-    .stat-l { font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-top:6px }
-    .stat-delta { font-size:11px; color:var(--green); margin-top:4px }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 32px
+    }
+
+    .stat-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 22px;
+      transition: border-color .25s
+    }
+
+    .stat-card:hover {
+      border-color: var(--border2)
+    }
+
+    .stat-ico {
+      font-size: 22px;
+      margin-bottom: 12px
+    }
+
+    .stat-n {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 32px;
+      letter-spacing: -.04em;
+      line-height: 1
+    }
+
+    .stat-n.blue {
+      background: linear-gradient(135deg, var(--r6), var(--r5));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text
+    }
+
+    .stat-n.green {
+      background: linear-gradient(135deg, var(--r5), var(--r4));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text
+    }
+
+    .stat-n.purple {
+      background: linear-gradient(135deg, var(--r7), var(--r6));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text
+    }
+
+    .stat-n.yellow {
+      background: linear-gradient(135deg, var(--r3), var(--r2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text
+    }
+
+    .stat-l {
+      font-size: 11px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 6px
+    }
+
+    .stat-delta {
+      font-size: 11px;
+      color: var(--green);
+      margin-top: 4px
+    }
 
     /* Tables */
-    .card { background:var(--bg2); border:1px solid var(--border); border-radius:16px; overflow:hidden; margin-bottom:24px }
-    .card-head { padding:20px 24px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between }
-    .card-title { font-weight:700; font-size:14px }
-    .card-action { font-size:11px; color:var(--r5); cursor:pointer; padding:6px 14px; border:1px solid rgba(56,240,196,.25); border-radius:100px; transition:all .2s }
-    .card-action:hover { background:rgba(56,240,196,.08) }
-    table { width:100%; border-collapse:collapse }
-    th { font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted2); font-weight:600; padding:12px 24px; text-align:left; background:var(--bg3) }
-    td { padding:14px 24px; border-bottom:1px solid var(--border); font-size:12px; vertical-align:middle }
-    tr:last-child td { border-bottom:none }
-    tr:hover td { background:var(--glass) }
-    .badge { display:inline-block; padding:3px 10px; border-radius:100px; font-size:10px; font-weight:600; letter-spacing:.06em }
-    .badge.new { background:rgba(88,168,255,.15); color:var(--r6); border:1px solid rgba(88,168,255,.25) }
-    .badge.read { background:var(--glass); color:var(--muted2); border:1px solid var(--border) }
-    .badge.active { background:rgba(56,240,196,.12); color:var(--r5); border:1px solid rgba(56,240,196,.25) }
-    .badge.done { background:rgba(127,255,131,.1); color:var(--r4); border:1px solid rgba(127,255,131,.2) }
-    .badge.pending { background:rgba(255,229,102,.1); color:var(--r3); border:1px solid rgba(255,229,102,.2) }
-    .action-btn { background:none; border:1px solid var(--border); color:var(--muted); padding:5px 12px; border-radius:6px; font-size:10px; cursor:pointer; transition:all .2s; font-family:'Outfit',sans-serif }
-    .action-btn:hover { border-color:var(--border2); color:#fff }
-    .action-btn.del:hover { border-color:rgba(255,77,109,.4); color:var(--red) }
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 24px
+    }
+
+    .card-head {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between
+    }
+
+    .card-title {
+      font-weight: 700;
+      font-size: 14px
+    }
+
+    .card-action {
+      font-size: 11px;
+      color: var(--r5);
+      cursor: pointer;
+      padding: 6px 14px;
+      border: 1px solid rgba(56, 240, 196, .25);
+      border-radius: 100px;
+      transition: all .2s
+    }
+
+    .card-action:hover {
+      background: rgba(56, 240, 196, .08)
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse
+    }
+
+    th {
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--muted2);
+      font-weight: 600;
+      padding: 12px 24px;
+      text-align: left;
+      background: var(--bg3)
+    }
+
+    td {
+      padding: 14px 24px;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      vertical-align: middle
+    }
+
+    tr:last-child td {
+      border-bottom: none
+    }
+
+    tr:hover td {
+      background: var(--glass)
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .06em
+    }
+
+    .badge.new {
+      background: rgba(88, 168, 255, .15);
+      color: var(--r6);
+      border: 1px solid rgba(88, 168, 255, .25)
+    }
+
+    .badge.read {
+      background: var(--glass);
+      color: var(--muted2);
+      border: 1px solid var(--border)
+    }
+
+    .badge.active {
+      background: rgba(56, 240, 196, .12);
+      color: var(--r5);
+      border: 1px solid rgba(56, 240, 196, .25)
+    }
+
+    .badge.done {
+      background: rgba(127, 255, 131, .1);
+      color: var(--r4);
+      border: 1px solid rgba(127, 255, 131, .2)
+    }
+
+    .badge.pending {
+      background: rgba(255, 229, 102, .1);
+      color: var(--r3);
+      border: 1px solid rgba(255, 229, 102, .2)
+    }
+
+    .action-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 10px;
+      cursor: pointer;
+      transition: all .2s;
+      font-family: 'Outfit', sans-serif
+    }
+
+    .action-btn:hover {
+      border-color: var(--border2);
+      color: #fff
+    }
+
+    .action-btn.del:hover {
+      border-color: rgba(255, 77, 109, .4);
+      color: var(--red)
+    }
 
     /* Form */
-    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px }
-    .fm { display:flex; flex-direction:column; gap:6px }
-    .fm label { font-size:10px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--muted2) }
-    .fm input, .fm textarea, .fm select {
-      background:var(--bg3); border:1px solid var(--border); color:var(--text);
-      padding:12px 14px; font-family:'Outfit',sans-serif; font-size:13px;
-      border-radius:10px; outline:none; resize:none; transition:border-color .2s;
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px
     }
-    .fm input:focus, .fm textarea:focus, .fm select:focus { border-color:rgba(88,168,255,.4) }
-    .fm textarea { min-height:100px }
-    .fm select option { background:#0a0e20 }
-    .fm-full { grid-column: 1 / -1 }
-    .submit-btn { background:linear-gradient(135deg,var(--r6),var(--r5)); color:#04060f; padding:12px 28px; font-family:'Outfit',sans-serif; font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; border:none; border-radius:100px; cursor:pointer; transition:all .25s }
-    .submit-btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(88,168,255,.3) }
-    .sec-pad { padding: 24px }
-    .alert-ok { background:rgba(56,240,196,.08); border:1px solid rgba(56,240,196,.2); border-radius:10px; padding:12px 16px; font-size:12px; color:var(--r5); margin-top:14px; display:none }
+
+    .fm {
+      display: flex;
+      flex-direction: column;
+      gap: 6px
+    }
+
+    .fm label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted2)
+    }
+
+    .fm input,
+    .fm textarea,
+    .fm select {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 12px 14px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      border-radius: 10px;
+      outline: none;
+      resize: none;
+      transition: border-color .2s;
+    }
+
+    .fm input:focus,
+    .fm textarea:focus,
+    .fm select:focus {
+      border-color: rgba(88, 168, 255, .4)
+    }
+
+    .fm textarea {
+      min-height: 100px
+    }
+
+    .fm select option {
+      background: #0a0e20
+    }
+
+    .fm-full {
+      grid-column: 1 / -1
+    }
+
+    .submit-btn {
+      background: linear-gradient(135deg, var(--r6), var(--r5));
+      color: #04060f;
+      padding: 12px 28px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all .25s
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(88, 168, 255, .3)
+    }
+
+    .sec-pad {
+      padding: 24px
+    }
+
+    .alert-ok {
+      background: rgba(56, 240, 196, .08);
+      border: 1px solid rgba(56, 240, 196, .2);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 12px;
+      color: var(--r5);
+      margin-top: 14px;
+      display: none
+    }
 
     /* Modal */
-    .modal-bg { position:fixed; inset:0; background:rgba(4,6,15,.88); z-index:500; display:none; align-items:center; justify-content:center }
-    .modal-bg.open { display:flex }
-    .modal { background:var(--bg2); border:1px solid var(--border2); border-radius:20px; padding:36px; max-width:560px; width:92vw; position:relative }
-    .modal-close { position:absolute; top:16px; right:16px; background:var(--glass); border:1px solid var(--border); color:var(--muted); width:32px; height:32px; border-radius:8px; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; transition:all .2s }
-    .modal-close:hover { color:#fff; border-color:var(--border2) }
-    .modal-title { font-weight:700; font-size:16px; margin-bottom:6px }
-    .modal-sub { font-size:12px; color:var(--muted); margin-bottom:20px }
-    .modal-body { font-size:13px; color:var(--muted); line-height:1.8 }
+    .modal-bg {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 6, 15, .88);
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center
+    }
+
+    .modal-bg.open {
+      display: flex
+    }
+
+    .modal {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 20px;
+      padding: 36px;
+      max-width: 560px;
+      width: 92vw;
+      position: relative
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .2s
+    }
+
+    .modal-close:hover {
+      color: #fff;
+      border-color: var(--border2)
+    }
+
+    .modal-title {
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 6px
+    }
+
+    .modal-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 20px
+    }
+
+    .modal-body {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.8
+    }
 
     /* Quick note area */
-    .notes-area { background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:16px; font-family:'DM Mono',monospace; font-size:12px; color:var(--text); width:100%; min-height:180px; resize:vertical; outline:none; transition:border-color .2s; line-height:1.7 }
-    .notes-area:focus { border-color:rgba(88,168,255,.4) }
+    .notes-area {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--text);
+      width: 100%;
+      min-height: 180px;
+      resize: vertical;
+      outline: none;
+      transition: border-color .2s;
+      line-height: 1.7
+    }
+
+    .notes-area:focus {
+      border-color: rgba(88, 168, 255, .4)
+    }
 
     @media(max-width:900px) {
-      .sidebar { display:none }
-      .main { margin-left:0; padding:20px }
-      .stat-grid { grid-template-columns:1fr 1fr }
-      .form-grid { grid-template-columns:1fr }
+      .sidebar {
+        display: none
+      }
+
+      .main {
+        margin-left: 0;
+        padding: 20px
+      }
+
+      .stat-grid {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr
+      }
     }
   </style>
 </head>
+
 <body>
 
-<!-- ══ LOGIN ══ -->
-<div id="login-overlay">
-  <div class="login-box">
-    <div class="login-logo">AURA</div>
-    <div class="login-sub">Studio Admin Panel</div>
-    <label class="login-label" for="pwd-input">Password</label>
-    <input class="login-input" type="password" id="pwd-input" placeholder="Enter admin password" autocomplete="current-password" />
-    <button class="login-btn" onclick="doLogin()">Access Dashboard →</button>
-    <div class="login-err" id="login-err"></div>
-    <div class="login-hint">🔒 This panel is private. Not indexed by search engines.</div>
-  </div>
-</div>
-
-<!-- ══ DASHBOARD ══ -->
-<div id="dashboard">
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <div class="sb-logo">
-      <div class="sb-logo-t">AURA</div>
-      <div class="sb-logo-s">Admin Studio Dashboard</div>
-    </div>
-    <nav class="sb-nav">
-      <div class="sb-section">Main</div>
-      <div class="sb-link active" onclick="showPage('overview',this)" id="nav-overview">
-        <span class="sb-ico">📊</span> Overview
-      </div>
-      <div class="sb-link" onclick="showPage('enquiries',this)" id="nav-enquiries">
-        <span class="sb-ico">📬</span> Enquiries
-        <span id="enq-badge" style="margin-left:auto;background:var(--r6);color:#04060f;font-size:9px;font-weight:800;padding:2px 7px;border-radius:100px">3</span>
-      </div>
-      <div class="sb-section">Projects</div>
-      <div class="sb-link" onclick="showPage('projects',this)" id="nav-projects">
-        <span class="sb-ico">🗂️</span> Projects
-      </div>
-      <div class="sb-link" onclick="showPage('add-project',this)" id="nav-add-project">
-        <span class="sb-ico">➕</span> Add Project
-      </div>
-      <div class="sb-section">Site</div>
-      <div class="sb-link" onclick="showPage('settings',this)" id="nav-settings">
-        <span class="sb-ico">⚙️</span> Settings
-      </div>
-      <div class="sb-link" onclick="showPage('notes',this)" id="nav-notes">
-        <span class="sb-ico">📝</span> Quick Notes
-      </div>
-      <div class="sb-link" onclick="window.open('../index.html','_blank')" style="margin-top:8px">
-        <span class="sb-ico">🌐</span> View Live Site ↗
-      </div>
-      <div class="sb-link" onclick="window.open('../about.html','_blank')">
-        <span class="sb-ico">👤</span> View About ↗
-      </div>
-    </nav>
-    <div class="sb-bottom">
-      <div class="sb-user">
-        <div class="sb-av">AU</div>
-        <div>
-          <div class="sb-uname">AURA Studio</div>
-          <div class="sb-urole">Administrator</div>
-        </div>
-      </div>
-      <button class="logout-btn" onclick="doLogout()">🔒 Lock Dashboard</button>
+  <!-- ══ LOGIN ══ -->
+  <div id="login-overlay">
+    <div class="login-box">
+      <div class="login-logo">AURA</div>
+      <div class="login-sub">Studio Admin Panel</div>
+      <label class="login-label" for="pwd-input">Password</label>
+      <input class="login-input" type="password" id="pwd-input" placeholder="Enter admin password"
+        autocomplete="current-password" />
+      <button class="login-btn" onclick="doLogin()">Access Dashboard →</button>
+      <div class="login-err" id="login-err"></div>
+      <div class="login-hint">🔒 This panel is private. Not indexed by search engines.</div>
     </div>
   </div>
 
-  <!-- Main -->
-  <div class="main">
-
-    <!-- ── OVERVIEW ── -->
-    <div class="page active" id="page-overview">
-      <div class="top-bar">
-        <div>
-          <div class="top-title">Good evening, <span>Induwara</span> 👋</div>
-          <div class="top-sub">Here's what's happening with AURA Studio</div>
-        </div>
-        <div class="top-time" id="live-clock">--:--:--</div>
+  <!-- ══ DASHBOARD ══ -->
+  <div id="dashboard">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sb-logo">
+        <div class="sb-logo-t">AURA</div>
+        <div class="sb-logo-s">Admin Studio Dashboard</div>
       </div>
-      <div class="stat-grid">
-        <div class="stat-card">
-          <div class="stat-ico">📬</div>
-          <div class="stat-n blue" id="s-enq">3</div>
-          <div class="stat-l">New Enquiries</div>
-          <div class="stat-delta">↑ 2 this week</div>
+      <nav class="sb-nav">
+        <div class="sb-section">Main</div>
+        <div class="sb-link active" onclick="showPage('overview',this)" id="nav-overview">
+          <span class="sb-ico">📊</span> Overview
         </div>
-        <div class="stat-card">
-          <div class="stat-ico">🗂️</div>
-          <div class="stat-n green" id="s-proj">1</div>
-          <div class="stat-l">Live Projects</div>
-          <div class="stat-delta">Pearl Heritage Tours</div>
+        <div class="sb-link" onclick="showPage('enquiries',this)" id="nav-enquiries">
+          <span class="sb-ico">📬</span> Enquiries
+          <span id="enq-badge"
+            style="margin-left:auto;background:var(--r6);color:#04060f;font-size:9px;font-weight:800;padding:2px 7px;border-radius:100px">3</span>
         </div>
-        <div class="stat-card">
-          <div class="stat-ico">🏷️</div>
-          <div class="stat-n yellow">10</div>
-          <div class="stat-l">Founding Spots Left</div>
-          <div class="stat-delta">50% off — update when filled</div>
+        <div class="sb-section">Projects</div>
+        <div class="sb-link" onclick="showPage('projects',this)" id="nav-projects">
+          <span class="sb-ico">🗂️</span> Projects
         </div>
-        <div class="stat-card">
-          <div class="stat-ico">⚡</div>
-          <div class="stat-n purple">$25</div>
-          <div class="stat-l">Starting Price</div>
-          <div class="stat-delta">Founding offer active</div>
+        <div class="sb-link" onclick="showPage('add-project',this)" id="nav-add-project">
+          <span class="sb-ico">➕</span> Add Project
         </div>
-      </div>
-
-      <!-- Recent enquiries preview -->
-      <div class="card">
-        <div class="card-head">
-          <div class="card-title">Recent Enquiries</div>
-          <div class="card-action" onclick="showPage('enquiries',document.getElementById('nav-enquiries'))">View all →</div>
+        <div class="sb-section">Site</div>
+        <div class="sb-link" onclick="showPage('settings',this)" id="nav-settings">
+          <span class="sb-ico">⚙️</span> Settings
         </div>
-        <table>
-          <thead><tr><th>Name</th><th>Email</th><th>Service</th><th>Date</th><th>Status</th><th></th></tr></thead>
-          <tbody id="enq-table-preview"></tbody>
-        </table>
-      </div>
-
-      <!-- Quick checklist -->
-      <div class="card">
-        <div class="card-head"><div class="card-title">Launch Checklist</div></div>
-        <div class="sec-pad">
-          <div id="checklist" style="display:flex;flex-direction:column;gap:10px"></div>
+        <div class="sb-link" onclick="showPage('notes',this)" id="nav-notes">
+          <span class="sb-ico">📝</span> Quick Notes
         </div>
-      </div>
-    </div>
-
-    <!-- ── ENQUIRIES ── -->
-    <div class="page" id="page-enquiries">
-      <div class="top-bar">
-        <div>
-          <div class="top-title">Enquiries</div>
-          <div class="top-sub">All contact form submissions</div>
+        <div class="sb-link" onclick="window.open('../index.html','_blank')" style="margin-top:8px">
+          <span class="sb-ico">🌐</span> View Live Site ↗
         </div>
-      </div>
-      <div class="card">
-        <div class="card-head">
-          <div class="card-title">All Messages</div>
-          <div class="card-action" onclick="clearEnquiries()">Clear all</div>
+        <div class="sb-link" onclick="window.open('../about.html','_blank')">
+          <span class="sb-ico">👤</span> View About ↗
         </div>
-        <table>
-          <thead><tr><th>Name</th><th>Email</th><th>Service</th><th>Budget</th><th>Date</th><th>Status</th><th></th></tr></thead>
-          <tbody id="enq-table-full"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ── PROJECTS ── -->
-    <div class="page" id="page-projects">
-      <div class="top-bar">
-        <div>
-          <div class="top-title">Projects</div>
-          <div class="top-sub">Manage your portfolio</div>
-        </div>
-        <div class="card-action" onclick="showPage('add-project',document.getElementById('nav-add-project'))">+ Add new</div>
-      </div>
-      <div class="card">
-        <table>
-          <thead><tr><th>Project</th><th>Client</th><th>Category</th><th>Status</th><th>URL</th><th></th></tr></thead>
-          <tbody id="proj-table"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ── ADD PROJECT ── -->
-    <div class="page" id="page-add-project">
-      <div class="top-bar">
-        <div>
-          <div class="top-title">Add Project</div>
-          <div class="top-sub">Add a new portfolio entry</div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="sec-pad">
-          <div class="form-grid">
-            <div class="fm"><label>Project Name</label><input id="p-name" type="text" placeholder="e.g. Pearl Heritage Tours" /></div>
-            <div class="fm"><label>Client Name</label><input id="p-client" type="text" placeholder="e.g. PHT" /></div>
-            <div class="fm"><label>Category</label>
-              <select id="p-cat">
-                <option>Travel & Tourism</option><option>E-Commerce</option><option>SaaS / Web App</option>
-                <option>Landing Page</option><option>Portfolio</option><option>Other</option>
-              </select>
-            </div>
-            <div class="fm"><label>Status</label>
-              <select id="p-status"><option>Live</option><option>In Progress</option><option>Completed</option></select>
-            </div>
-            <div class="fm"><label>Live URL</label><input id="p-url" type="url" placeholder="https://" /></div>
-            <div class="fm"><label>Price Charged ($)</label><input id="p-price" type="number" placeholder="e.g. 99" /></div>
-            <div class="fm fm-full"><label>Short Description</label><textarea id="p-desc" placeholder="Describe the project in 1–2 sentences..."></textarea></div>
+      </nav>
+      <div class="sb-bottom">
+        <div class="sb-user">
+          <div class="sb-av">AU</div>
+          <div>
+            <div class="sb-uname">AURA Studio</div>
+            <div class="sb-urole">Administrator</div>
           </div>
-          <br/>
-          <button class="submit-btn" onclick="addProject()">Save Project →</button>
-          <div class="alert-ok" id="proj-ok">✓ Project saved successfully!</div>
         </div>
+        <button class="logout-btn" onclick="doLogout()">🔒 Lock Dashboard</button>
       </div>
     </div>
 
-    <!-- ── SETTINGS ── -->
-    <div class="page" id="page-settings">
-      <div class="top-bar">
-        <div>
-          <div class="top-title">Settings</div>
-          <div class="top-sub">Site configuration &amp; admin preferences</div>
+    <!-- Main -->
+    <div class="main">
+
+      <!-- ── OVERVIEW ── -->
+      <div class="page active" id="page-overview">
+        <div class="top-bar">
+          <div>
+            <div class="top-title">Good evening, <span>Induwara</span> 👋</div>
+            <div class="top-sub">Here's what's happening with AURA Studio</div>
+          </div>
+          <div class="top-time" id="live-clock">--:--:--</div>
         </div>
-      </div>
-      <div class="card" style="margin-bottom:20px">
-        <div class="card-head"><div class="card-title">Founding Offer Tracker</div></div>
-        <div class="sec-pad">
-          <div class="form-grid">
-            <div class="fm">
-              <label>Spots Remaining</label>
-              <input type="number" id="s-spots" placeholder="10" min="0" max="10" />
-            </div>
-            <div class="fm">
-              <label>Offer Active</label>
-              <select id="s-offer"><option>Yes — show on site</option><option>No — hide offer</option></select>
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-ico">📬</div>
+            <div class="stat-n blue" id="s-enq">3</div>
+            <div class="stat-l">New Enquiries</div>
+            <div class="stat-delta">↑ 2 this week</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-ico">🗂️</div>
+            <div class="stat-n green" id="s-proj">1</div>
+            <div class="stat-l">Live Projects</div>
+            <div class="stat-delta">Pearl Heritage Tours</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-ico">🏷️</div>
+            <div class="stat-n yellow">10</div>
+            <div class="stat-l">Founding Spots Left</div>
+            <div class="stat-delta">50% off — update when filled</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-ico">⚡</div>
+            <div class="stat-n purple">$25</div>
+            <div class="stat-l">Starting Price</div>
+            <div class="stat-delta">Founding offer active</div>
+          </div>
+        </div>
+
+        <!-- Recent enquiries preview -->
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Recent Enquiries</div>
+            <div class="card-action" onclick="showPage('enquiries',document.getElementById('nav-enquiries'))">View all →
             </div>
           </div>
-          <br/><button class="submit-btn" onclick="saveSettings()">Save Settings →</button>
-          <div class="alert-ok" id="set-ok">✓ Settings saved!</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Service</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="enq-table-preview"></tbody>
+          </table>
         </div>
-      </div>
-      <div class="card">
-        <div class="card-head"><div class="card-title">Change Admin Password</div></div>
-        <div class="sec-pad">
-          <div class="form-grid">
-            <div class="fm"><label>Current Password</label><input type="password" id="pw-cur" /></div>
-            <div class="fm"><label>New Password</label><input type="password" id="pw-new" placeholder="min 6 characters" /></div>
+
+        <!-- Quick checklist -->
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Launch Checklist</div>
           </div>
-          <br/><button class="submit-btn" onclick="changePassword()">Update Password →</button>
-          <div class="alert-ok" id="pw-ok">✓ Password updated!</div>
+          <div class="sec-pad">
+            <div id="checklist" style="display:flex;flex-direction:column;gap:10px"></div>
+          </div>
         </div>
       </div>
+
+      <!-- ── ENQUIRIES ── -->
+      <div class="page" id="page-enquiries">
+        <div class="top-bar">
+          <div>
+            <div class="top-title">Enquiries</div>
+            <div class="top-sub">All contact form submissions</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">All Messages</div>
+            <div class="card-action" onclick="clearEnquiries()">Clear all</div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Service</th>
+                <th>Budget</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="enq-table-full"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── PROJECTS ── -->
+      <div class="page" id="page-projects">
+        <div class="top-bar">
+          <div>
+            <div class="top-title">Projects</div>
+            <div class="top-sub">Manage your portfolio</div>
+          </div>
+          <div class="card-action" onclick="showPage('add-project',document.getElementById('nav-add-project'))">+ Add
+            new</div>
+        </div>
+        <div class="card">
+          <table>
+            <thead>
+              <tr>
+                <th>Project</th>
+                <th>Client</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>URL</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="proj-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── ADD PROJECT ── -->
+      <div class="page" id="page-add-project">
+        <div class="top-bar">
+          <div>
+            <div class="top-title">Add Project</div>
+            <div class="top-sub">Add a new portfolio entry</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="sec-pad">
+            <div class="form-grid">
+              <div class="fm"><label>Project Name</label><input id="p-name" type="text"
+                  placeholder="e.g. Pearl Heritage Tours" /></div>
+              <div class="fm"><label>Client Name</label><input id="p-client" type="text" placeholder="e.g. PHT" /></div>
+              <div class="fm"><label>Category</label>
+                <select id="p-cat">
+                  <option>Travel & Tourism</option>
+                  <option>E-Commerce</option>
+                  <option>SaaS / Web App</option>
+                  <option>Landing Page</option>
+                  <option>Portfolio</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="fm"><label>Status</label>
+                <select id="p-status">
+                  <option>Live</option>
+                  <option>In Progress</option>
+                  <option>Completed</option>
+                </select>
+              </div>
+              <div class="fm"><label>Live URL</label><input id="p-url" type="url" placeholder="https://" /></div>
+              <div class="fm"><label>Price Charged ($)</label><input id="p-price" type="number" placeholder="e.g. 99" />
+              </div>
+              <div class="fm fm-full"><label>Short Description</label><textarea id="p-desc"
+                  placeholder="Describe the project in 1–2 sentences..."></textarea></div>
+            </div>
+            <br />
+            <button class="submit-btn" onclick="addProject()">Save Project →</button>
+            <div class="alert-ok" id="proj-ok">✓ Project saved successfully!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SETTINGS ── -->
+      <div class="page" id="page-settings">
+        <div class="top-bar">
+          <div>
+            <div class="top-title">Settings</div>
+            <div class="top-sub">Site configuration &amp; admin preferences</div>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:20px">
+          <div class="card-head">
+            <div class="card-title">Founding Offer Tracker</div>
+          </div>
+          <div class="sec-pad">
+            <div class="form-grid">
+              <div class="fm">
+                <label>Spots Remaining</label>
+                <input type="number" id="s-spots" placeholder="10" min="0" max="10" />
+              </div>
+              <div class="fm">
+                <label>Offer Active</label>
+                <select id="s-offer">
+                  <option>Yes — show on site</option>
+                  <option>No — hide offer</option>
+                </select>
+              </div>
+            </div>
+            <br /><button class="submit-btn" onclick="saveSettings()">Save Settings →</button>
+            <div class="alert-ok" id="set-ok">✓ Settings saved!</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div class="card-title">Change Admin Password</div>
+          </div>
+          <div class="sec-pad">
+            <div class="form-grid">
+              <div class="fm"><label>Current Password</label><input type="password" id="pw-cur" /></div>
+              <div class="fm"><label>New Password</label><input type="password" id="pw-new"
+                  placeholder="min 6 characters" /></div>
+            </div>
+            <br /><button class="submit-btn" onclick="changePassword()">Update Password →</button>
+            <div class="alert-ok" id="pw-ok">✓ Password updated!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── NOTES ── -->
+      <div class="page" id="page-notes">
+        <div class="top-bar">
+          <div>
+            <div class="top-title">Quick Notes</div>
+            <div class="top-sub">Your private scratchpad — auto-saved locally</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="sec-pad">
+            <textarea class="notes-area" id="notes-area"
+              placeholder="Jot down client notes, ideas, todos..."></textarea>
+            <br /><br />
+            <button class="submit-btn" onclick="saveNotes()">Save Notes →</button>
+            <div class="alert-ok" id="notes-ok">✓ Notes saved!</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /main -->
+  </div><!-- /dashboard -->
+
+  <!-- Enquiry detail modal -->
+  <div class="modal-bg" id="enq-modal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-title" id="modal-name">Enquiry Detail</div>
+      <div class="modal-sub" id="modal-meta"></div>
+      <div class="modal-body" id="modal-body"></div>
     </div>
-
-    <!-- ── NOTES ── -->
-    <div class="page" id="page-notes">
-      <div class="top-bar">
-        <div>
-          <div class="top-title">Quick Notes</div>
-          <div class="top-sub">Your private scratchpad — auto-saved locally</div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="sec-pad">
-          <textarea class="notes-area" id="notes-area" placeholder="Jot down client notes, ideas, todos..."></textarea>
-          <br/><br/>
-          <button class="submit-btn" onclick="saveNotes()">Save Notes →</button>
-          <div class="alert-ok" id="notes-ok">✓ Notes saved!</div>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- /main -->
-</div><!-- /dashboard -->
-
-<!-- Enquiry detail modal -->
-<div class="modal-bg" id="enq-modal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="modal-title" id="modal-name">Enquiry Detail</div>
-    <div class="modal-sub" id="modal-meta"></div>
-    <div class="modal-body" id="modal-body"></div>
   </div>
-</div>
 
-<script>
-  // ── CONFIG ──
-  const API_URL = 'http://localhost:4000/api';
-  let STATE = {
-    token: localStorage.getItem('aura_token'),
-    enquiries: [],
-    projects: [],
-  };
+  <script>
+    // ── CONFIG ──
+    const API_URL = 'https://portfolio-production-a4ca.up.railway.app/api';
+    let STATE = {
+      token: localStorage.getItem('aura_token'),
+      enquiries: [],
+      projects: [],
+    };
 
-  // ── LOGIN ──
-  async function doLogin() {
-    const pwd = document.getElementById('pwd-input').value;
-    const err = document.getElementById('login-err');
-    err.textContent = 'Logging in...';
-    try {
-      // Hardcoding email based on the prompt's instructions: admin@aura.studio
-      const res = await fetch(`${API_URL}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: 'admin@aura.studio', password: pwd })
-      });
-      const data = await res.json();
-
-      if (data.token) {
-        STATE.token = data.token;
-        localStorage.setItem('aura_token', data.token);
-        document.getElementById('login-overlay').style.display = 'none';
-        document.getElementById('dashboard').style.display = 'block';
-        initDashboard();
-      } else {
-        err.textContent = '✕ ' + (data.error || 'Incorrect password. Try again.');
-      }
-    } catch (e) {
-      err.textContent = '✕ Connection to backend failed. Is server running on port 4000?';
-    }
-    document.getElementById('pwd-input').value = '';
-    setTimeout(() => { if(err.textContent.includes('✕')) err.textContent = ''; }, 4000);
-  }
-  document.getElementById('pwd-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-
-  function doLogout() {
-    STATE.token = null;
-    localStorage.removeItem('aura_token');
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('login-overlay').style.display = 'flex';
-  }
-
-  // Auto-login check
-  window.onload = async () => {
-    if (STATE.token) {
+    // ── LOGIN ──
+    async function doLogin() {
+      const pwd = document.getElementById('pwd-input').value;
+      const err = document.getElementById('login-err');
+      err.textContent = 'Logging in...';
       try {
-        const res = await fetch(`${API_URL}/auth/me`, { headers: { 'Authorization': `Bearer ${STATE.token}` } });
-        if (res.ok) {
+        // Hardcoding email based on the prompt's instructions: admin@aura.studio
+        const res = await fetch(`${API_URL}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: 'admin@aura.studio', password: pwd })
+        });
+        const data = await res.json();
+
+        if (data.token) {
+          STATE.token = data.token;
+          localStorage.setItem('aura_token', data.token);
           document.getElementById('login-overlay').style.display = 'none';
           document.getElementById('dashboard').style.display = 'block';
           initDashboard();
         } else {
-          doLogout();
+          err.textContent = '✕ ' + (data.error || 'Incorrect password. Try again.');
         }
-      } catch { doLogout(); }
+      } catch (e) {
+        err.textContent = '✕ Connection to backend failed. Is the server running?';
+      }
+      document.getElementById('pwd-input').value = '';
+      setTimeout(() => { if (err.textContent.includes('✕')) err.textContent = ''; }, 4000);
     }
-  };
+    document.getElementById('pwd-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 
-  // ── API HELPERS ──
-  async function apiGet(path) {
-    const res = await fetch(API_URL + path, { headers: { 'Authorization': `Bearer ${STATE.token}` } });
-    if (res.status === 401 || res.status === 403) doLogout();
-    if (!res.ok) throw new Error('API Error');
-    return res.json();
-  }
-  async function apiPost(path, body) {
-    const res = await fetch(API_URL + path, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${STATE.token}` },
-      body: JSON.stringify(body)
-    });
-    return res.json();
-  }
-  async function apiDelete(path) {
-    return fetch(API_URL + path, { method: 'DELETE', headers: { 'Authorization': `Bearer ${STATE.token}` } });
-  }
-
-  // ── NAVIGATION ──
-  function showPage(id, el) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.sb-link').forEach(l => l.classList.remove('active'));
-    document.getElementById('page-' + id).classList.add('active');
-    if (el) el.classList.add('active');
-  }
-
-  // ── DASHBOARD LOAD ──
-  async function initDashboard() {
-    try {
-      const msgs = await apiGet('/messages');
-      STATE.enquiries = msgs;
-      renderEnqTable(true);
-
-      const projs = await apiGet('/projects');
-      STATE.projects = projs;
-      renderProjTable();
-
-      const stats = await apiGet('/dashboard/stats');
-      document.getElementById('s-enq').textContent = stats.unreadMessages;
-      document.getElementById('s-proj').textContent = stats.totalProjects;
-      document.getElementById('s-spots').value = stats.spotsRemaining;
-
-      const pricing = await apiGet('/pricing');
-      document.getElementById('s-offer').value = pricing.settings.offer_active === 'true' ? 'Yes — show on site' : 'No — hide offer';
-
-      updateBadge();
-    } catch (e) {
-      console.error('Failed to load dashboard data:', e);
+    function doLogout() {
+      STATE.token = null;
+      localStorage.removeItem('aura_token');
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('login-overlay').style.display = 'flex';
     }
 
-    renderChecklist();
-    updateClock();
-    setInterval(updateClock, 1000);
-    document.getElementById('notes-area').value = localStorage.getItem('aura_notes') || '';
-  }
+    // Auto-login check
+    window.onload = async () => {
+      if (STATE.token) {
+        try {
+          const res = await fetch(`${API_URL}/auth/me`, { headers: { 'Authorization': `Bearer ${STATE.token}` } });
+          if (res.ok) {
+            document.getElementById('login-overlay').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            initDashboard();
+          } else {
+            doLogout();
+          }
+        } catch { doLogout(); }
+      }
+    };
 
-  // ── ENQUIRIES ──
-  function renderEnqTable(preview) {
-    const tbId = preview ? 'enq-table-preview' : 'enq-table-full';
-    const rows = preview ? STATE.enquiries.slice(0,3) : STATE.enquiries;
-    const tb = document.getElementById(tbId);
-    if (!tb) return;
+    // ── API HELPERS ──
+    async function apiGet(path) {
+      const res = await fetch(API_URL + path, { headers: { 'Authorization': `Bearer ${STATE.token}` } });
+      if (res.status === 401 || res.status === 403) doLogout();
+      if (!res.ok) throw new Error('API Error');
+      return res.json();
+    }
+    async function apiPost(path, body) {
+      const res = await fetch(API_URL + path, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${STATE.token}` },
+        body: JSON.stringify(body)
+      });
+      return res.json();
+    }
+    async function apiDelete(path) {
+      return fetch(API_URL + path, { method: 'DELETE', headers: { 'Authorization': `Bearer ${STATE.token}` } });
+    }
 
-    tb.innerHTML = rows.length ? rows.map(e => `
+    // ── NAVIGATION ──
+    function showPage(id, el) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.sb-link').forEach(l => l.classList.remove('active'));
+      document.getElementById('page-' + id).classList.add('active');
+      if (el) el.classList.add('active');
+    }
+
+    // ── DASHBOARD LOAD ──
+    async function initDashboard() {
+      try {
+        const msgs = await apiGet('/messages');
+        STATE.enquiries = msgs;
+        renderEnqTable(true);
+
+        const projs = await apiGet('/projects');
+        STATE.projects = projs;
+        renderProjTable();
+
+        const stats = await apiGet('/dashboard/stats');
+        document.getElementById('s-enq').textContent = stats.unreadMessages;
+        document.getElementById('s-proj').textContent = stats.totalProjects;
+        document.getElementById('s-spots').value = stats.spotsRemaining;
+
+        const pricing = await apiGet('/pricing');
+        document.getElementById('s-offer').value = pricing.settings.offer_active === 'true' ? 'Yes — show on site' : 'No — hide offer';
+
+        updateBadge();
+      } catch (e) {
+        console.error('Failed to load dashboard data:', e);
+      }
+
+      renderChecklist();
+      updateClock();
+      setInterval(updateClock, 1000);
+      document.getElementById('notes-area').value = localStorage.getItem('aura_notes') || '';
+    }
+
+    // ── ENQUIRIES ──
+    function renderEnqTable(preview) {
+      const tbId = preview ? 'enq-table-preview' : 'enq-table-full';
+      const rows = preview ? STATE.enquiries.slice(0, 3) : STATE.enquiries;
+      const tb = document.getElementById(tbId);
+      if (!tb) return;
+
+      tb.innerHTML = rows.length ? rows.map(e => `
       <tr style="${!e.is_read ? 'background:rgba(88,168,255,.05)' : ''}">
         <td style="font-weight:600">${e.name}</td>
         <td><a href="mailto:${e.email}" style="color:var(--r5);text-decoration:none">${e.email}</a></td>
         <td style="color:var(--muted)">${e.service || '—'}</td>
-        ${!preview ? `<td style="color:var(--muted)">${e.budget||'—'}</td>` : ''}
+        ${!preview ? `<td style="color:var(--muted)">${e.budget || '—'}</td>` : ''}
         <td style="color:var(--muted2)">${new Date(e.created_at).toLocaleDateString()}</td>
         <td><span class="badge ${e.is_read ? 'read' : 'new'}">${e.is_read ? 'READ' : 'NEW'}</span></td>
         <td style="display:flex;gap:6px">
@@ -574,153 +1221,154 @@
           <button class="action-btn del" onclick="deleteEnq(${e.id})">Del</button>
         </td>
       </tr>`).join('') : '<tr><td colspan="7" style="text-align:center;color:var(--muted2);padding:36px">No enquiries yet.</td></tr>';
-  }
-
-  async function viewEnq(id) {
-    const e = STATE.enquiries.find(x => x.id === id);
-    if (!e) return;
-    
-    if (!e.is_read) {
-      await fetch(`${API_URL}/messages/${id}/read`, { method: 'PATCH', headers: { 'Authorization': `Bearer ${STATE.token}` } });
-      e.is_read = true;
     }
-    
-    document.getElementById('modal-name').textContent = e.name;
-    document.getElementById('modal-meta').textContent = `${e.email} · ${e.service||'General'} · ${new Date(e.created_at).toLocaleString()}`;
-    document.getElementById('modal-body').innerHTML = `
-      <p><strong>Budget:</strong> ${e.budget||'Not specified'}</p>
-      <p style="margin-top:6px"><strong>Timeline:</strong> ${e.timeline||'Not specified'}</p>
+
+    async function viewEnq(id) {
+      const e = STATE.enquiries.find(x => x.id === id);
+      if (!e) return;
+
+      if (!e.is_read) {
+        await fetch(`${API_URL}/messages/${id}/read`, { method: 'PATCH', headers: { 'Authorization': `Bearer ${STATE.token}` } });
+        e.is_read = true;
+      }
+
+      document.getElementById('modal-name').textContent = e.name;
+      document.getElementById('modal-meta').textContent = `${e.email} · ${e.service || 'General'} · ${new Date(e.created_at).toLocaleString()}`;
+      document.getElementById('modal-body').innerHTML = `
+      <p><strong>Budget:</strong> ${e.budget || 'Not specified'}</p>
+      <p style="margin-top:6px"><strong>Timeline:</strong> ${e.timeline || 'Not specified'}</p>
       <p style="margin-top:14px;font-style:italic;color:var(--text)">"${e.message}"</p>
       <p style="margin-top:20px"><a href="mailto:${e.email}?subject=Re: Your AURA enquiry" style="background:linear-gradient(135deg,var(--r6),var(--r5));color:#04060f;padding:10px 22px;border-radius:100px;text-decoration:none;font-size:12px;font-weight:700">Reply via Email →</a></p>`;
-    document.getElementById('enq-modal').classList.add('open');
-    renderEnqTable(false);
-    updateBadge();
-  }
+      document.getElementById('enq-modal').classList.add('open');
+      renderEnqTable(false);
+      updateBadge();
+    }
 
-  async function deleteEnq(id) {
-    if (!confirm('Delete this enquiry?')) return;
-    await apiDelete(`/messages/${id}`);
-    STATE.enquiries = STATE.enquiries.filter(x => x.id !== id);
-    renderEnqTable(false);
-    renderEnqTable(true);
-    updateBadge();
-  }
+    async function deleteEnq(id) {
+      if (!confirm('Delete this enquiry?')) return;
+      await apiDelete(`/messages/${id}`);
+      STATE.enquiries = STATE.enquiries.filter(x => x.id !== id);
+      renderEnqTable(false);
+      renderEnqTable(true);
+      updateBadge();
+    }
 
-  function closeModal() { document.getElementById('enq-modal').classList.remove('open'); }
+    function closeModal() { document.getElementById('enq-modal').classList.remove('open'); }
 
-  function updateBadge() {
-    const unread = STATE.enquiries.filter(e => !e.is_read).length;
-    document.getElementById('s-enq').textContent = unread;
-    const b = document.getElementById('enq-badge');
-    b.textContent = unread; b.style.display = unread ? 'inline' : 'none';
-  }
+    function updateBadge() {
+      const unread = STATE.enquiries.filter(e => !e.is_read).length;
+      document.getElementById('s-enq').textContent = unread;
+      const b = document.getElementById('enq-badge');
+      b.textContent = unread; b.style.display = unread ? 'inline' : 'none';
+    }
 
-  // ── PROJECTS ──
-  function renderProjTable() {
-    const tb = document.getElementById('proj-table');
-    tb.innerHTML = STATE.projects.length ? STATE.projects.map(p => `
+    // ── PROJECTS ──
+    function renderProjTable() {
+      const tb = document.getElementById('proj-table');
+      tb.innerHTML = STATE.projects.length ? STATE.projects.map(p => `
       <tr>
         <td style="font-weight:600">${p.name}</td>
-        <td style="color:var(--muted)">${p.client||'—'}</td>
-        <td><span class="badge read">${p.type||'General'}</span></td>
+        <td style="color:var(--muted)">${p.client || '—'}</td>
+        <td><span class="badge read">${p.type || 'General'}</span></td>
         <td><span class="badge ${p.status === 'live' ? 'active' : p.status === 'completed' ? 'done' : 'pending'}">${p.status.toUpperCase()}</span></td>
-        <td><a href="${p.live_url||'#'}" target="_blank" style="color:var(--r5);text-decoration:none;font-size:11px">${p.live_url ? 'Visit ↗' : '—'}</a></td>
+        <td><a href="${p.live_url || '#'}" target="_blank" style="color:var(--r5);text-decoration:none;font-size:11px">${p.live_url ? 'Visit ↗' : '—'}</a></td>
         <td><button class="action-btn del" onclick="deleteProject(${p.id})">Remove</button></td>
       </tr>`).join('') : '<tr><td colspan="6" style="text-align:center;color:var(--muted2);padding:36px">No projects yet. Add your first one!</td></tr>';
-  }
+    }
 
-  async function addProject() {
-    const name = document.getElementById('p-name').value.trim();
-    if (!name) return alert('Project name is required.');
-    
-    const body = {
-      name,
-      client: document.getElementById('p-client').value,
-      type: document.getElementById('p-cat').value,
-      status: document.getElementById('p-status').value.toLowerCase(),
-      live_url: document.getElementById('p-url').value,
-      price: document.getElementById('p-price').value,
-      description: document.getElementById('p-desc').value,
-    };
+    async function addProject() {
+      const name = document.getElementById('p-name').value.trim();
+      if (!name) return alert('Project name is required.');
 
-    const newP = await apiPost('/projects', body);
-    STATE.projects.unshift(newP);
-    
-    document.getElementById('proj-ok').style.display = 'block';
-    setTimeout(() => document.getElementById('proj-ok').style.display = 'none', 3000);
-    ['p-name','p-client','p-url','p-price','p-desc'].forEach(id => document.getElementById(id).value = '');
-    renderProjTable();
-    document.getElementById('s-proj').textContent = STATE.projects.length;
-  }
+      const body = {
+        name,
+        client: document.getElementById('p-client').value,
+        type: document.getElementById('p-cat').value,
+        status: document.getElementById('p-status').value.toLowerCase(),
+        live_url: document.getElementById('p-url').value,
+        price: document.getElementById('p-price').value,
+        description: document.getElementById('p-desc').value,
+      };
 
-  async function deleteProject(id) {
-    if (!confirm('Remove this project?')) return;
-    await apiDelete(`/projects/${id}`);
-    STATE.projects = STATE.projects.filter(p => p.id !== id);
-    renderProjTable();
-    document.getElementById('s-proj').textContent = STATE.projects.length;
-  }
+      const newP = await apiPost('/projects', body);
+      STATE.projects.unshift(newP);
 
-  // ── SETTINGS ──
-  async function saveSettings() {
-    const spots = document.getElementById('s-spots').value;
-    const offer = document.getElementById('s-offer').value.includes('Yes');
-    await fetch(`${API_URL}/pricing/settings/update`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${STATE.token}` },
-      body: JSON.stringify({ founding_spots: spots, offer_active: offer })
-    });
-    document.getElementById('set-ok').style.display = 'block';
-    setTimeout(() => document.getElementById('set-ok').style.display = 'none', 3000);
-  }
+      document.getElementById('proj-ok').style.display = 'block';
+      setTimeout(() => document.getElementById('proj-ok').style.display = 'none', 3000);
+      ['p-name', 'p-client', 'p-url', 'p-price', 'p-desc'].forEach(id => document.getElementById(id).value = '');
+      renderProjTable();
+      document.getElementById('s-proj').textContent = STATE.projects.length;
+    }
 
-  function changePassword() {
-    alert("To change admin password securely, please update the hash in the Database directly or add a new auth route.");
-  }
+    async function deleteProject(id) {
+      if (!confirm('Remove this project?')) return;
+      await apiDelete(`/projects/${id}`);
+      STATE.projects = STATE.projects.filter(p => p.id !== id);
+      renderProjTable();
+      document.getElementById('s-proj').textContent = STATE.projects.length;
+    }
 
-  // ── NOTES & CHECKLIST (Remain Local for now) ──
-  function saveNotes() {
-    localStorage.setItem('aura_notes', document.getElementById('notes-area').value);
-    document.getElementById('notes-ok').style.display = 'block';
-    setTimeout(() => document.getElementById('notes-ok').style.display = 'none', 3000);
-  }
+    // ── SETTINGS ──
+    async function saveSettings() {
+      const spots = document.getElementById('s-spots').value;
+      const offer = document.getElementById('s-offer').value.includes('Yes');
+      await fetch(`${API_URL}/pricing/settings/update`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${STATE.token}` },
+        body: JSON.stringify({ founding_spots: spots, offer_active: offer })
+      });
+      document.getElementById('set-ok').style.display = 'block';
+      setTimeout(() => document.getElementById('set-ok').style.display = 'none', 3000);
+    }
 
-  const CHECKS = [
-    { id:'c1', text:'Connect backend (port 4000) to contact form' },
-    { id:'c2', text:'Replace hello@aura.studio with real email' },
-    { id:'c3', text:'Add real social media links in footer' },
-    { id:'c4', text:'Verify pearlheritagetours.com live URL works' },
-    { id:'c5', text:'Set up Google Analytics on index.html' },
-  ];
+    function changePassword() {
+      alert("To change admin password securely, please update the hash in the Database directly or add a new auth route.");
+    }
 
-  function renderChecklist() {
-    const el = document.getElementById('checklist');
-    const done = JSON.parse(localStorage.getItem('aura_checks') || '{}');
-    el.innerHTML = CHECKS.map(c => `
-      <label style="display:flex;align-items:center;gap:12px;cursor:pointer;padding:10px 14px;border-radius:10px;transition:background .2s;background:${done[c.id]?'rgba(56,240,196,.06)':'var(--glass)'}">
-        <input type="checkbox" ${done[c.id]?'checked':''} onchange="toggleCheck('${c.id}',this)" style="width:16px;height:16px;cursor:pointer;accent-color:var(--r5)" />
-        <span style="font-size:13px;${done[c.id]?'text-decoration:line-through;color:var(--muted2)':'color:var(--text)'}">${c.text}</span>
+    // ── NOTES & CHECKLIST (Remain Local for now) ──
+    function saveNotes() {
+      localStorage.setItem('aura_notes', document.getElementById('notes-area').value);
+      document.getElementById('notes-ok').style.display = 'block';
+      setTimeout(() => document.getElementById('notes-ok').style.display = 'none', 3000);
+    }
+
+    const CHECKS = [
+      { id: 'c1', text: 'Connect backend to contact form' },
+      { id: 'c2', text: 'Replace hello@aura.studio with real email' },
+      { id: 'c3', text: 'Add real social media links in footer' },
+      { id: 'c4', text: 'Verify pearlheritagetours.com live URL works' },
+      { id: 'c5', text: 'Set up Google Analytics on index.html' },
+    ];
+
+    function renderChecklist() {
+      const el = document.getElementById('checklist');
+      const done = JSON.parse(localStorage.getItem('aura_checks') || '{}');
+      el.innerHTML = CHECKS.map(c => `
+      <label style="display:flex;align-items:center;gap:12px;cursor:pointer;padding:10px 14px;border-radius:10px;transition:background .2s;background:${done[c.id] ? 'rgba(56,240,196,.06)' : 'var(--glass)'}">
+        <input type="checkbox" ${done[c.id] ? 'checked' : ''} onchange="toggleCheck('${c.id}',this)" style="width:16px;height:16px;cursor:pointer;accent-color:var(--r5)" />
+        <span style="font-size:13px;${done[c.id] ? 'text-decoration:line-through;color:var(--muted2)' : 'color:var(--text)'}">${c.text}</span>
       </label>`).join('');
-  }
+    }
 
-  function toggleCheck(id, cb) {
-    const done = JSON.parse(localStorage.getItem('aura_checks') || '{}');
-    done[id] = cb.checked;
-    localStorage.setItem('aura_checks', JSON.stringify(done));
-    renderChecklist();
-  }
+    function toggleCheck(id, cb) {
+      const done = JSON.parse(localStorage.getItem('aura_checks') || '{}');
+      done[id] = cb.checked;
+      localStorage.setItem('aura_checks', JSON.stringify(done));
+      renderChecklist();
+    }
 
-  // ── CLOCK ──
-  function updateClock() {
-    const n = new Date();
-    document.getElementById('live-clock').textContent =
-      n.toLocaleTimeString('en-US', { hour12:false }) + ' · ' +
-      n.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
-  }
+    // ── CLOCK ──
+    function updateClock() {
+      const n = new Date();
+      document.getElementById('live-clock').textContent =
+        n.toLocaleTimeString('en-US', { hour12: false }) + ' · ' +
+        n.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
 
-  document.getElementById('enq-modal').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-  });
-</script>
+    document.getElementById('enq-modal').addEventListener('click', function (e) {
+      if (e.target === this) closeModal();
+    });
+  </script>
 </body>
+
 </html>

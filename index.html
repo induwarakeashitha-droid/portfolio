@@ -2928,13 +2928,13 @@
       card.addEventListener('mouseleave', () => { card.style.transition = 'transform .5s cubic-bezier(.23,1,.32,1)'; card.style.transform = 'perspective(900px) rotateY(0) rotateX(0) translateZ(0)'; });
     });
 
-    // Form — connects to backend on port 4000
+    // Form — connects to backend
     async function sendForm() {
       const data = { name: document.getElementById('f-name').value, email: document.getElementById('f-email').value, service: document.getElementById('f-service').value, budget: document.getElementById('f-budget').value, timeline: document.getElementById('f-timeline').value, message: document.getElementById('f-msg').value };
       if (!data.name || !data.email || !data.message) { alert('Please fill in name, email, and message.'); return; }
       const btn = document.querySelector('.csub'); btn.textContent = 'Sending…'; btn.disabled = true;
       try {
-        const res = await fetch('http://localhost:4000/api/messages', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+        const res = await fetch('https://portfolio-production-a4ca.up.railway.app/api/messages', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
         if (res.ok) {
           document.getElementById('form-ok').style.display = 'block';
           document.getElementById('form-ok').textContent = "✓ Message received! We'll reply within 24 hours.";
@@ -2955,10 +2955,10 @@
     // Fetch dynamic pricing settings
     async function loadDynamicPricing() {
       try {
-        const res = await fetch('http://localhost:4000/api/pricing');
+        const res = await fetch('https://portfolio-production-a4ca.up.railway.app/api/pricing');
         if (!res.ok) return;
         const data = await res.json();
-        
+
         // Update spots remaining
         if (data.settings && data.settings.founding_spots) {
           const s = document.getElementById('live-spots');
@@ -2968,7 +2968,7 @@
             else s.textContent = spots;
           }
         }
-        
+
         // If offer is toggled off from admin panel, hide the banner across the site
         if (data.settings && data.settings.offer_active === 'false') {
           const banners = document.querySelectorAll('.offer-banner, #obar');

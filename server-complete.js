@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════════════════════
 //  AURA BACKEND — Node.js + Express + PostgreSQL
-//  Run: npm run dev   →   http://localhost:4000
+//  Run: npm run dev   →   https://portfolio-production-a4ca.up.railway.app
 // ═══════════════════════════════════════════════════════════════════
 
 // ── PACKAGE.JSON (create this first) ────────────────────────────────
@@ -478,7 +478,7 @@ app.use(cors({
   origin: [
     'http://localhost:3000',
     'http://127.0.0.1:5500',  // VS Code Live Server
-    'https://yourdomain.com', // Replace with your actual domain
+    'https://portfolio-production-a4ca.up.railway.app', // Deployed frontend
   ],
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -524,11 +524,11 @@ app.listen(PORT, () => {
 
 /*
 STEP 1 — Create admin account (run ONCE)
-  POST http://localhost:4000/api/auth/register
+  POST https://portfolio-production-a4ca.up.railway.app/api/auth/register
   Body: { "email": "admin@aura.studio", "password": "your_strong_password", "secret": "aura_setup_once_then_delete_from_env" }
 
 STEP 2 — Login to get JWT token
-  POST http://localhost:4000/api/auth/login
+  POST https://portfolio-production-a4ca.up.railway.app/api/auth/login
   Body: { "email": "admin@aura.studio", "password": "your_strong_password" }
   Response: { "token": "eyJ..." }
 
@@ -581,7 +581,7 @@ STEP 5 — Deploy backend on Railway:
   3. Add PostgreSQL plugin
   4. Set all env vars in Railway dashboard
   5. Run schema.sql on Railway DB
-  6. Update frontend API URL from localhost:4000 to your Railway URL
+  6. Update frontend API URL from https://portfolio-production-a4ca.up.railway.app to your Railway URL
 */
 
 // Export all code as strings for reference

@@ -11,7 +11,7 @@ app.use(cors({
   origin: [
     'http://localhost:3000',
     'http://127.0.0.1:5500',  // VS Code Live Server
-    'https://yourdomain.com', // Replace with your actual domain
+    'https://portfolio-production-a4ca.up.railway.app', // Deployed frontend
   ],
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
