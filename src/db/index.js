@@ -12,7 +12,14 @@ const pool = new Pool(
       }
 );
 
-pool.on('error', (err) => console.error('DB pool error:', err));
+// Log connection status
+pool.on('connect', () => console.log('✓ Database connected'));
+pool.on('error', (err) => console.error('✗ DB pool error:', err.message));
+
+// Test the connection on startup
+pool.query('SELECT NOW()')
+  .then(() => console.log('✓ Database connection verified'))
+  .catch((err) => console.error('✗ Database connection failed:', err.message));
 
 module.exports = {
   query:  (text, params) => pool.query(text, params),
