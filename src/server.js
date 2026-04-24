@@ -2,11 +2,15 @@ require('dotenv').config();
 const express    = require('express');
 const cors       = require('cors');
 const helmet     = require('helmet');
+const path       = require('path');
 
 const app = express();
 
 // ── Security ────────────────────────────────────────────────────────
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: false,  // Allow inline scripts/styles in HTML pages
+  crossOriginEmbedderPolicy: false,
+}));
 app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (mobile apps, curl, Postman, server-to-server)
@@ -99,10 +103,23 @@ app.post('/setup-db', async (req, res) => {
 
 // ── Health check ────────────────────────────────────────────────────
 app.get('/health', (req, res) => res.json({ status: 'ok', time: new Date() }));
-app.get('/', (req, res) => res.json({ name: 'AURA API', version: '1.0.0', status: 'running ✓' }));
 
-// ── 404 ─────────────────────────────────────────────────────────────
-app.use((req, res) => res.status(404).json({ error: 'Route not found.' }));
+// ── Serve frontend static files ─────────────────────────────────────
+const publicDir = path.join(__dirname, '..');
+app.use(express.static(publicDir, {
+  index: 'index.html',
+  extensions: ['html'],
+}));
+
+// ── Fallback: serve index.html for non-API routes (SPA support) ─────
+app.use((req, res, next) => {
+  // If it's an API route that wasn't matched, return 404 JSON
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ error: 'Route not found.' });
+  }
+  // For all other routes, serve index.html
+  res.sendFile(path.join(publicDir, 'index.html'));
+});
 
 // ── Error handler ───────────────────────────────────────────────────
 app.use((err, req, res, next) => {
