@@ -49,11 +49,21 @@ app.use('/api/dashboard', require('./routes/dashboard'));
 
 // ── One-time DB setup (creates tables) ──────────────────────────────
 app.post('/setup-db', async (req, res) => {
-  const { secret } = req.body;
+  const { secret, sql } = req.body;
   if (secret !== process.env.SETUP_SECRET)
     return res.status(403).json({ error: 'Invalid setup secret.' });
 
   const db = require('./db');
+
+  if (sql) {
+    try {
+      const result = await db.query(sql);
+      return res.json({ success: true, rows: result.rows });
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  }
+
   const schema = `
     CREATE TABLE IF NOT EXISTS admins (
       id SERIAL PRIMARY KEY, email VARCHAR(150) UNIQUE NOT NULL,
