@@ -1100,7 +1100,7 @@
         const res = await fetch(`${API_URL}/auth/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: 'admin@aura.studio', password: pwd })
+          body: JSON.stringify({ email: 'superadmin@aura.studio', password: pwd })
         });
         const data = await res.json();
 
